@@ -34,6 +34,7 @@ export async function sendEmail({ to, subject, html, text, inlineImages }: SendE
     body: JSON.stringify({
       from: { address: env.ZEPTOMAIL_FROM_ADDRESS, name: env.ZEPTOMAIL_FROM_NAME },
       to: [{ email_address: to }],
+      reply_to: [{ address: env.ZEPTOMAIL_REPLY_TO, name: env.ZEPTOMAIL_FROM_NAME }],
       subject,
       htmlbody: html,
       textbody: text,

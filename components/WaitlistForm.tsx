@@ -224,11 +224,7 @@ export function WaitlistForm({ intro }: WaitlistFormProps) {
           {submitting ? "Joining…" : "Notify me"}
         </button>
 
-        <p className={styles.note}>
-          <span className={styles.noteLong}>We&rsquo;ll only use your details to send Cloud Community Day updates.</span>
-          {/* One-line version for phones, where every line of height counts. */}
-          <span className={styles.noteShort}>We only use your details for event updates.</span>
-        </p>
+        <p className={styles.note}>We&rsquo;ll only use your details to send Cloud Community Day updates.</p>
       </form>
     </>
   );

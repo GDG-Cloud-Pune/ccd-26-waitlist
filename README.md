@@ -49,6 +49,7 @@ All of them are **server-only**. Never prefix them with `NEXT_PUBLIC_`, or they 
 | `ZEPTOMAIL_API_KEY` | ZeptoMail → Mail Agents → SMTP/API → **Send Mail token** |
 | `ZEPTOMAIL_FROM_ADDRESS` | an address on a domain verified in ZeptoMail |
 | `ZEPTOMAIL_FROM_NAME` | e.g. `GDG Cloud Pune` |
+| `ZEPTOMAIL_REPLY_TO` | Optional. Monitored inbox for replies; defaults to `contact@gdgcloudpune.in` |
 | `RATE_LIMIT_SALT` | `openssl rand -hex 32` |
 
 Delete the downloaded service-account JSON once the values are in `.env.local` and Vercel.

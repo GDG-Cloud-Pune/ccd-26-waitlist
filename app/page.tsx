@@ -2,6 +2,7 @@ import Image from "next/image";
 import { CloudMark } from "@/components/brand/CloudMark";
 import { ColorBar } from "@/components/brand/ColorBar";
 import { Pill } from "@/components/brand/Pill";
+import { SiteHeader } from "@/components/SiteHeader";
 import { SocialLinks } from "@/components/SocialLinks";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import styles from "./page.module.css";
@@ -9,23 +10,24 @@ import styles from "./page.module.css";
 export default function Home() {
   return (
     <main className={styles.page}>
-      <header className={styles.header}>
+      <SiteHeader className={styles.header}>
         {/* Trimmed from "GDG Professional - Horizontal - Dark" so the artwork sits flush with the page gutter. */}
         <Image
           src="/gdg-cloud-pune-logo.png"
           alt="Google Developer Groups Cloud Pune"
           width={1692}
           height={203}
-          // Matches the CSS widths in page.module.css so the browser picks a small variant, not a 1920px one.
-          sizes="(max-width: 900px) min(62vw, 260px), 440px"
+          // Matches the CSS widths below so the browser picks a small variant, not a 1920px one.
+          sizes="(max-width: 900px) min(60vw, 230px), 440px"
           priority
           className={styles.logo}
         />
-        <CloudMark className={styles.cloud} />
-      </header>
+      </SiteHeader>
 
       <section className={styles.poster} aria-labelledby="page-title">
         <div className={styles.lockup}>
+          {/* Phone layout only ("CCD Pune Waitlist" mobile design). */}
+          <CloudMark className={styles.phoneCloud} />
           <h1 id="page-title" className={styles.wordmark}>
             <span>Cloud</span> <span>Community Day</span>
           </h1>
@@ -49,7 +51,12 @@ export default function Home() {
                 <h2 id="waitlist-title" className={styles.cta}>
                   Join the waitlist
                 </h2>
-                <p className={styles.lede}>Be the first to know when registrations open.</p>
+                <p className={styles.lede}>
+                  <span className={styles.ledeDesktop}>Be the first to know when registrations open.</span>
+                  <span className={styles.ledePhone}>
+                    Join the waitlist and be the first to know when registrations open.
+                  </span>
+                </p>
               </>
             }
           />
