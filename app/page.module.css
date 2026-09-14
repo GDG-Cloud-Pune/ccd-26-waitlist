@@ -1,0 +1,292 @@
+/* One screen, no scroll: sizes are tied to viewport height as well as width. */
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100dvh;
+  min-height: 520px;
+}
+
+.header {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: clamp(20px, 4vh, 48px) clamp(24px, 4vw, 72px) 0;
+}
+
+/* The logo is 8.3:1, so size it by width (tied to both viewport axes) and let height follow. */
+.logo {
+  display: block;
+  min-width: 0;
+  width: clamp(240px, min(26vw, 42vh), 440px);
+  height: auto;
+}
+
+.cloud {
+  flex: none;
+  width: clamp(56px, 9vh, 112px);
+  height: auto;
+}
+
+/* Poster column — after "CCD Pune Coming Soon Post" */
+.poster {
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  padding: clamp(24px, 4vh, 48px) clamp(24px, 4vw, 72px);
+}
+
+.lockup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(14px, 2.6vh, 28px);
+}
+
+.wordmark {
+  margin: 0;
+  font-size: clamp(40px, min(10vh, 6.2vw), 112px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+.wordmark > span {
+  display: block;
+  white-space: nowrap;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.4vw, 16px);
+}
+
+.location,
+.year {
+  font-size: clamp(18px, 3vh, 34px);
+  padding: 0.3em 0.75em;
+}
+
+.location {
+  font-weight: 500;
+}
+
+.bar {
+  width: min(420px, 100%);
+  height: clamp(12px, 1.8vh, 18px);
+}
+
+.comingSoon {
+  margin: clamp(28px, 6vh, 72px) 0 0;
+  font-size: clamp(44px, min(11vh, 7.4vw), 132px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--yellow);
+}
+
+/* Form column spans the poster and footer rows so the form stays centered in the full height. */
+.panel {
+  grid-column: 2;
+  grid-row: 2 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: clamp(24px, 4vh, 48px) clamp(24px, 4vw, 72px);
+}
+
+.panelInner {
+  width: min(100%, 440px);
+}
+
+.cta {
+  margin: 0;
+  font-size: clamp(26px, 4.2vh, 40px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.lede {
+  margin: 8px 0 clamp(20px, 3.5vh, 32px);
+  font-size: clamp(15px, 2.2vh, 18px);
+  color: var(--muted);
+}
+
+/* Bottom-left social links */
+.footer {
+  grid-column: 1;
+  grid-row: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  padding: 0 clamp(24px, 4vw, 72px) clamp(20px, 4vh, 48px);
+}
+
+.followLabel {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/*
+ * Tablets and phones: poster at the top, form centered in the remaining height, socials last.
+ * Spacing and type scale with viewport height so short phones stay compact and tall
+ * phones breathe instead of leaving an empty band at the bottom.
+ */
+@media (max-width: 900px) {
+  .page {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .header {
+    padding: clamp(14px, 2.6vh, 28px) 22px 0;
+  }
+
+  .logo {
+    width: min(62vw, 260px);
+  }
+
+  .cloud {
+    width: clamp(40px, 6.5vh, 60px);
+  }
+
+  .poster {
+    justify-content: flex-start;
+    padding: clamp(12px, 2.6vh, 32px) 22px 0;
+  }
+
+  /* Wordmark, then the color bar, then Pune + 2026. */
+  .lockup {
+    gap: clamp(10px, 2vh, 18px);
+  }
+
+  .wordmark {
+    font-size: clamp(30px, min(11vw, 5.8vh), 60px);
+  }
+
+  .metaRow {
+    gap: 8px;
+  }
+
+  .location,
+  .year {
+    font-size: clamp(15px, 2.1vh, 18px);
+  }
+
+  .bar {
+    width: 100%;
+    height: 12px;
+  }
+
+  .comingSoon {
+    margin-top: clamp(12px, 2.8vh, 32px);
+    font-size: clamp(36px, min(13vw, 6.8vh), 72px);
+  }
+
+  /* The form is centered in whatever height is left between the poster and the socials. */
+  .panel {
+    flex: 1;
+    align-items: center;
+    padding: clamp(12px, 2vh, 24px) 22px;
+  }
+
+  .panelInner {
+    width: 100%;
+    max-width: 520px;
+    margin-inline: auto;
+  }
+
+  /* "Coming soon" + placeholders + "Notify me" carry it on phones; screen readers still get the heading. */
+  .cta {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .lede {
+    display: none;
+  }
+
+  .footer {
+    gap: 10px;
+    padding: 0 22px clamp(10px, 2vh, 20px);
+  }
+
+  .followLabel {
+    font-size: 12px;
+  }
+}
+
+/* Short phones (e.g. 375×667, 360×640): tighten spacing so the form still fits. */
+@media (max-width: 900px) and (max-height: 700px) {
+  .header {
+    padding-top: 12px;
+  }
+
+  .poster {
+    padding-top: 8px;
+  }
+
+  .lockup {
+    gap: 8px;
+  }
+
+  .comingSoon {
+    margin-top: 10px;
+  }
+
+  .panel {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+/* Very short phones (e.g. 320×568). */
+@media (max-width: 900px) and (max-height: 600px) {
+  .header {
+    padding-top: 10px;
+  }
+
+  .poster {
+    padding-top: 4px;
+  }
+
+  .lockup {
+    gap: 6px;
+  }
+
+  .bar {
+    height: 10px;
+  }
+
+  .comingSoon {
+    margin-top: 6px;
+  }
+
+  .panel {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .footer {
+    padding-bottom: 6px;
+  }
+}

@@ -1,0 +1,30 @@
+.colorBar {
+  display: flex;
+  gap: 10px;
+  height: 16px;
+}
+
+.colorBar > span {
+  flex: 1;
+  border-radius: 999px;
+  border: 3px solid var(--outline);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--outline);
+  border-radius: 999px;
+  padding: 6px 18px;
+  line-height: 1;
+  font-weight: 600;
+  background: var(--white);
+  color: var(--black);
+  white-space: nowrap;
+}
+
+.pill[data-tone="ghost"] {
+  background: transparent;
+  color: var(--off-white);
+}
