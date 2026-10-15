@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef } from "react";
 /*
  * Port of the design's ccd-motion.js to Next.js client routing:
  *  - scroll reveals for [data-reveal] elements,
+ *  - parallax for [data-parallax] elements,
  *  - a fade on first load,
  *  - the brand "cloud billow" transition between pages.
  * Everything is skipped when the visitor prefers reduced motion.
@@ -65,11 +66,11 @@ function buildClouds(): CloudLayer {
   return { overlay, backdrop, clouds };
 }
 
-/** Clouds roll in to cover the page, then `done` runs. */
-function cover(done: () => void) {
-  const { backdrop, clouds } = buildClouds();
+/** Clouds roll in to cover the page; `done` runs once it is fully covered. */
+function cover(done: () => void): CloudLayer {
+  const layer = buildClouds();
   let last = 0;
-  clouds.forEach((el) => {
+  layer.clouds.forEach((el) => {
     const delay = (1 - Number(el.dataset.y)) * 90 + Math.random() * 50;
     last = Math.max(last, delay);
     el.animate(
@@ -80,18 +81,32 @@ function cover(done: () => void) {
       { duration: 220, delay, easing: "cubic-bezier(.2,.8,.3,1)", fill: "forwards" },
     );
   });
-  backdrop.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 110, delay: last + 110, fill: "forwards" });
+  layer.backdrop.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 110, delay: last + 110, fill: "forwards" });
   setTimeout(done, last + 230);
+
+  // Safety net: if navigation never completes, don't leave the page covered.
+  setTimeout(() => {
+    if (layer.overlay.isConnected) uncover(layer);
+  }, 4000);
+
+  return layer;
 }
 
-/** Clouds part to reveal the page that just loaded. */
-function clear() {
-  const { overlay, backdrop, clouds } = buildClouds();
-  let max = 0;
+/** Clouds part to reveal the page underneath, then the overlay is removed. */
+function uncover(layer: CloudLayer) {
+  const { overlay, backdrop, clouds } = layer;
+  if (!overlay.isConnected) return;
+
+  // Settle the cover animations first, otherwise their fill:forwards values win.
+  backdrop.getAnimations().forEach((animation) => animation.cancel());
   backdrop.style.opacity = "1";
   clouds.forEach((el) => {
+    el.getAnimations().forEach((animation) => animation.cancel());
     el.style.opacity = "1";
+    el.style.transform = "none";
   });
+
+  let max = 0;
   setTimeout(() => {
     backdrop.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 120, fill: "forwards" });
     clouds.forEach((el) => {
@@ -113,7 +128,7 @@ export function Motion() {
   const router = useRouter();
   const pathname = usePathname();
   const firstRender = useRef(true);
-  const arrivedByCloud = useRef(false);
+  const coverLayer = useRef<CloudLayer | null>(null);
 
   // Scroll reveals, re-scanned on every page.
   useEffect(() => {
@@ -189,7 +204,7 @@ export function Motion() {
     };
   }, [pathname]);
 
-  // First load: fade in, unless we arrived through the cloud transition.
+  // First load: fade in, or part the clouds if we arrived from a full page load.
   useEffect(() => {
     if (!firstRender.current) return;
     firstRender.current = false;
@@ -201,15 +216,16 @@ export function Motion() {
       /* private mode */
     }
     if (prefersReducedMotion()) return;
-    if (cameByCloud) clear();
+    if (cameByCloud) uncover(buildCoveredLayer());
     else document.documentElement.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, easing: "ease-out" });
   }, []);
 
-  // Clouds part again after each client-side navigation we covered.
+  // After a covered navigation, part the very clouds that covered the page.
   useEffect(() => {
-    if (!arrivedByCloud.current) return;
-    arrivedByCloud.current = false;
-    clear();
+    const layer = coverLayer.current;
+    if (!layer) return;
+    coverLayer.current = null;
+    uncover(layer);
   }, [pathname]);
 
   const onClick = useCallback(
@@ -232,16 +248,27 @@ export function Motion() {
         return;
       }
 
-      arrivedByCloud.current = true;
-      cover(() => router.push(url.pathname + url.search + url.hash));
+      coverLayer.current = cover(() => router.push(url.pathname + url.search + url.hash));
     },
     [router],
   );
 
   useEffect(() => {
-    document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
+    // Capture phase: next/link navigates in its own click handler, so a bubble-phase
+    // listener would run after the route had already changed and never get to animate.
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
   }, [onClick]);
 
   return null;
+}
+
+/** A layer already in its covered state, for pages entered by a full page load. */
+function buildCoveredLayer(): CloudLayer {
+  const layer = buildClouds();
+  layer.backdrop.style.opacity = "1";
+  layer.clouds.forEach((el) => {
+    el.style.opacity = "1";
+  });
+  return layer;
 }

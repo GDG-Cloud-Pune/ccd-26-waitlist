@@ -22,8 +22,9 @@
   border: 2px solid var(--off-white);
   border-radius: 999px;
   background: rgba(30, 30, 30, 0.82);
+  /* No hand-written -webkit- prefix: writing it here makes the CSS optimiser keep
+     only the prefixed form, which Chrome and Firefox ignore. It adds prefixes itself. */
   backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
 }
 
 .brand {

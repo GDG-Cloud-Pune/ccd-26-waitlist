@@ -25,5 +25,11 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "typescript": "^5"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "not op_mini all",
+    "safari >= 15",
+    "ios_saf >= 15"
+  ]
 }
