@@ -1,0 +1,108 @@
+.header {
+  display: flex;
+  justify-content: center;
+  padding: 168px var(--gutter) 40px;
+}
+
+.headerInner {
+  width: 100%;
+  max-width: var(--container);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pill,
+.pillSolid {
+  padding: 7px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  border: 2px solid var(--off-white);
+  border-radius: 999px;
+}
+
+.pillSolid {
+  font-weight: 600;
+  color: var(--black);
+  background: var(--off-white);
+}
+
+.title {
+  margin: 0;
+  max-width: 1000px;
+  font-size: clamp(56px, 8.4vw, 120px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.blue {
+  color: var(--blue);
+}
+
+.lede {
+  margin: 0;
+  max-width: 520px;
+  font-size: clamp(18px, 1.5vw, 21px);
+  line-height: 1.5;
+  color: var(--body);
+  text-wrap: pretty;
+}
+
+.ctaSection {
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--gutter) clamp(88px, 11vw, 152px);
+}
+
+.ctaCard {
+  width: 100%;
+  max-width: var(--container);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: clamp(32px, 5vw, 56px);
+  color: var(--black);
+  background: var(--red);
+  border: 3px solid var(--off-white);
+  border-radius: 40px;
+}
+
+.ctaTitle {
+  margin: 0;
+  font-size: clamp(36px, 4.6vw, 60px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+.darkPill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--off-white);
+  background: var(--black);
+  border: 3px solid var(--black);
+  border-radius: 999px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: var(--yellow);
+  border-radius: 99px;
+}

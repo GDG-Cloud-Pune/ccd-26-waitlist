@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit, Space_Mono } from "next/font/google";
+import { EVENT } from "@/lib/event";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -16,14 +17,13 @@ const spaceMono = Space_Mono({
   display: "swap",
 });
 
-const title = "Cloud Community Day Pune 2026 · Coming soon";
-const description =
-  "Cloud Community Day is coming to Pune in 2026. Join the GDG Cloud Pune waitlist to hear first when registrations open.";
+const title = `${EVENT.name} ${EVENT.year} · ${EVENT.city}`;
+const description = `${EVENT.name} is ${EVENT.organiser}'s annual conference for developers building on Google Cloud and AI. ${EVENT.dateLong} at ${EVENT.venue}.`;
 
 export const metadata: Metadata = {
-  title,
+  title: { default: title, template: `%s · ${EVENT.name} ${EVENT.year}` },
   description,
-  openGraph: { title, description, type: "website", siteName: "GDG Cloud Pune" },
+  openGraph: { title, description, type: "website", siteName: EVENT.organiser },
   twitter: { card: "summary", title, description },
 };
 

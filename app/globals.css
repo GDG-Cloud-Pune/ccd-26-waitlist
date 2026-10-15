@@ -1,7 +1,7 @@
 :root {
   color-scheme: dark;
 
-  /* Core Google palette — "CCD Pune Coming Soon Post" */
+  /* Core Google palette */
   --blue: #4285f4;
   --green: #34a853;
   --yellow: #f9ab00;
@@ -11,9 +11,17 @@
   --white: #ffffff;
 
   --outline: var(--off-white);
+  --surface: #262626;
+  --hairline: #3a3a3a;
+  --body: #c8c8c8;
   --muted: #b8b8b8;
   --faint: #8a8a8a;
   --error: #f28b82;
+
+  /* Page shell */
+  --container: 1240px;
+  --gutter: 24px;
+  --nav-height: 84px;
 
   --font-sans: var(--font-outfit), "Google Sans", system-ui, sans-serif;
   --font-mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -23,6 +31,10 @@
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 html,
@@ -38,16 +50,23 @@ body {
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.5;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 a {
   color: inherit;
+  text-decoration: none;
 }
 
 a:hover {
-  color: var(--blue);
+  color: var(--yellow);
+}
+
+::selection {
+  background: var(--yellow);
+  color: var(--black);
 }
 
 :focus-visible {
@@ -68,6 +87,10 @@ a:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {

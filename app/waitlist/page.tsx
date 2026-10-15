@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { CloudMark } from "@/components/brand/CloudMark";
 import { ColorBar } from "@/components/brand/ColorBar";
@@ -7,7 +8,12 @@ import { SocialLinks } from "@/components/SocialLinks";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import styles from "./page.module.css";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "Waitlist",
+  description: "Join the Cloud Community Day Pune 2026 waitlist and hear first when registrations open.",
+};
+
+export default function WaitlistPage() {
   return (
     <main className={styles.page}>
       <SiteHeader className={styles.header}>

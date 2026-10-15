@@ -1,0 +1,33 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 80px;
+  padding: 14px 12px 12px;
+  background: var(--black);
+  border: 2px solid var(--off-white);
+  border-radius: 22px;
+}
+
+.value {
+  font-size: clamp(28px, 2.8vw, 38px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.label {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}

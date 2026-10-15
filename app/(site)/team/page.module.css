@@ -1,0 +1,248 @@
+.header {
+  display: flex;
+  justify-content: center;
+  padding: 168px var(--gutter) 72px;
+}
+
+.headerInner {
+  width: 100%;
+  max-width: var(--container);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.eyebrow {
+  align-self: flex-start;
+  padding: 7px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  border: 2px solid var(--off-white);
+  border-radius: 999px;
+}
+
+.title {
+  margin: 0;
+  max-width: 1000px;
+  font-size: clamp(56px, 8.4vw, 120px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.yellow {
+  color: var(--yellow);
+}
+
+.lede {
+  margin: 0;
+  max-width: 560px;
+  font-size: clamp(18px, 1.5vw, 21px);
+  line-height: 1.5;
+  color: var(--body);
+  text-wrap: pretty;
+}
+
+.section {
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--gutter) clamp(80px, 9vw, 128px);
+}
+
+.sectionInner {
+  width: 100%;
+  max-width: var(--container);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.sectionHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding-top: 20px;
+  border-top: 2px solid var(--off-white);
+}
+
+.h2 {
+  margin: 0;
+  font-size: clamp(32px, 3.6vw, 48px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.count {
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.organiserGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
+  gap: 20px;
+}
+
+.organiserCard {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+  border: 2px solid var(--off-white);
+  border-radius: 28px;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.organiserCard:hover {
+  transform: translateY(-6px);
+}
+
+.organiserPhoto {
+  position: relative;
+  aspect-ratio: 4 / 4.2;
+  border-bottom: 2px solid var(--off-white);
+}
+
+.organiserBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 18px 20px 20px;
+}
+
+.personText {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.personName {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.personRole {
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.chip {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--off-white);
+  border-radius: 99px;
+}
+
+.volunteerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+  gap: 16px;
+}
+
+.volunteerCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.volunteerCard:hover {
+  transform: translateY(-4px);
+}
+
+.volunteerPhoto {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--surface);
+  border: 2px solid var(--off-white);
+  border-radius: 24px;
+}
+
+.volunteerText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.volunteerName {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.volunteerRole {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+}
+
+.ctaSection {
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--gutter) clamp(88px, 11vw, 152px);
+}
+
+.ctaCard {
+  width: 100%;
+  max-width: var(--container);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: clamp(32px, 5vw, 56px);
+  color: var(--black);
+  background: var(--green);
+  border: 3px solid var(--off-white);
+  border-radius: 40px;
+}
+
+.ctaTitle {
+  margin: 0;
+  font-size: clamp(36px, 4.6vw, 60px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+.ctaButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--off-white);
+  background: var(--black);
+  border: 3px solid var(--black);
+  border-radius: 999px;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.ctaButton:hover {
+  color: var(--yellow);
+  transform: translateY(-3px);
+}

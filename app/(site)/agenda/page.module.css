@@ -1,0 +1,56 @@
+.header {
+  display: flex;
+  justify-content: center;
+  padding: 168px var(--gutter) 40px;
+}
+
+.headerInner {
+  width: 100%;
+  max-width: var(--container);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pill,
+.pillSolid {
+  padding: 7px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  border: 2px solid var(--off-white);
+  border-radius: 999px;
+}
+
+.pillSolid {
+  font-weight: 600;
+  color: var(--black);
+  background: var(--off-white);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(56px, 8.4vw, 120px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.green {
+  color: var(--green);
+}
+
+.lede {
+  margin: 0;
+  max-width: 520px;
+  font-size: clamp(18px, 1.5vw, 21px);
+  line-height: 1.5;
+  color: var(--body);
+  text-wrap: pretty;
+}
