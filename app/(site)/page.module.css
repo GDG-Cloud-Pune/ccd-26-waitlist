@@ -196,6 +196,7 @@
 
 .dragHint {
   position: absolute;
+  white-space: nowrap;
   right: 0;
   bottom: 28px;
   z-index: 2;
@@ -234,6 +235,8 @@
    * so pull the band up by that much (margin % is of the width: 19% × 9/16).
    */
   .heroArt {
+    /* Explicit width: Safari doesn't stretch an empty grid item that has an aspect ratio. */
+    width: 100%;
     min-height: 0;
     aspect-ratio: 16 / 9;
     margin-top: -10.5%;
@@ -413,6 +416,7 @@
 }
 
 .editionCard {
+  container: edition / inline-size;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -500,8 +504,9 @@
   transform: none;
 }
 
-/* Phones: full-width cards, so two long rows instead of a block. */
-@media (max-width: 600px) {
+/* Two long rows instead of a block, but only when the card itself is wide enough
+   (a phone can show one card per row or two, depending on its width). */
+@container edition (min-width: 250px) {
   .editionDots {
     grid-template-columns: repeat(10, 16px);
   }
