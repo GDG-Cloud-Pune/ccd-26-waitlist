@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { DAY_END, DAY_START, SLOT_MINUTES, durationLabel, minutesOf, type AgendaTrack, type Session } from "@/data/agenda";
 import { TRACKS } from "@/lib/event";
 import styles from "./Timetable.module.css";
@@ -12,6 +12,9 @@ const BASE = minutesOf(DAY_START);
 const ROWS = (minutesOf(DAY_END) - BASE) / SLOT_MINUTES;
 
 const rowOf = (time: string) => (minutesOf(time) - BASE) / SLOT_MINUTES + 1;
+const keyOf = (session: Session) => `${session.track}-${session.start}-${session.title}`;
+
+type TrackLabel = keyof typeof TRACKS;
 
 export function Timetable({ sessions }: { sessions: Session[] }) {
   const [focus, setFocus] = useState<Focus>("All");
@@ -42,6 +45,74 @@ export function Timetable({ sessions }: { sessions: Session[] }) {
     return track === "main" ? "2" : "3";
   };
 
+  const renderCard = (session: Session, stacked: boolean) => {
+    const isBreak = session.kind === "Break";
+    const isHighlight = session.kind === "Keynote" || session.kind === "Opening" || session.kind === "Closing";
+    const trackColor = session.track === "work" ? TRACKS.Workshops.color : TRACKS["Main Stage"].color;
+    const dimmed = !stacked && !inFocus(session.track);
+    const kind = !isBreak && (
+      <span className={styles.kind} style={isHighlight ? undefined : { background: trackColor, borderColor: trackColor }}>
+        {session.kind}
+      </span>
+    );
+    const duration = <span className={styles.duration}>{durationLabel(session.start, session.end)}</span>;
+    const speaker = session.speaker && (
+      <div className={styles.speaker}>
+        <span className={styles.speakerAvatar} aria-hidden="true" />
+        <span>{session.speaker}</span>
+      </div>
+    );
+
+    return (
+      <div
+        className={styles.session}
+        data-stacked={stacked ? "" : undefined}
+        data-break={isBreak ? "" : undefined}
+        data-highlight={isHighlight ? "" : undefined}
+        data-dim={dimmed ? "" : undefined}
+        style={{
+          ...(stacked
+            ? {}
+            : { gridColumn: columnOf(session.track), gridRow: `${rowOf(session.start)} / ${rowOf(session.end)}` }),
+          ...(isBreak || isHighlight
+            ? {}
+            : {
+                borderColor: trackColor,
+                background: session.track === "work" ? "var(--tint-green)" : session.track === "main" ? "var(--tint-blue)" : "var(--surface)",
+              }),
+        }}
+      >
+        {stacked ? (
+          <>
+            <div className={styles.stackTop}>
+              <span className={styles.clock}>
+                <span className={styles.clockStart}>{session.start}</span>
+                <span className={styles.clockEnd}>
+                  to {session.end} · {durationLabel(session.start, session.end)}
+                </span>
+              </span>
+              {kind}
+            </div>
+            <div className={styles.sessionTitle}>{session.title}</div>
+            {speaker}
+          </>
+        ) : (
+          <>
+            <div className={styles.sessionTop}>
+              {kind}
+              <span className={styles.range}>
+                {session.start} – {session.end}
+              </span>
+              {duration}
+            </div>
+            <div className={styles.sessionTitle}>{session.title}</div>
+            {speaker}
+          </>
+        )}
+      </div>
+    );
+  };
+
   return (
     <>
       <div className={styles.filterRow}>
@@ -68,80 +139,54 @@ export function Timetable({ sessions }: { sessions: Session[] }) {
 
       <section className={styles.section}>
         <div className={styles.inner}>
-          <div className={styles.headRow} style={{ gridTemplateColumns: columns }}>
-            <span />
-            {headers.map((label) => (
-              <div
-                key={label}
-                className={styles.head}
-                data-dim={!narrow && effectiveFocus !== "All" && effectiveFocus !== label ? "" : undefined}
-              >
-                <span className={styles.headDot} style={{ background: TRACKS[label].color }} aria-hidden="true" />
-                {label}
-                <span className={styles.headSub}>{TRACKS[label].blurb}</span>
-              </div>
-            ))}
-          </div>
-
-          <div
-            className={styles.grid}
-            style={{ gridTemplateColumns: columns, gridTemplateRows: `repeat(${ROWS}, minmax(30px, auto))` }}
-          >
-            {startTimes.map((time) => (
-              <div key={time} className={styles.time} style={{ gridRow: `${rowOf(time)} / span 1` }}>
-                {time}
-              </div>
-            ))}
-
-            {visible.map((session) => {
-              const isBreak = session.kind === "Break";
-              const isHighlight = session.kind === "Keynote" || session.kind === "Opening" || session.kind === "Closing";
-              const trackColor = session.track === "work" ? TRACKS.Workshops.color : TRACKS["Main Stage"].color;
-              const dimmed = !narrow && !inFocus(session.track);
-
-              return (
-                <div
-                  key={`${session.track}-${session.start}-${session.title}`}
-                  className={styles.session}
-                  data-break={isBreak ? "" : undefined}
-                  data-highlight={isHighlight ? "" : undefined}
-                  data-dim={dimmed ? "" : undefined}
-                  style={{
-                    gridColumn: columnOf(session.track),
-                    gridRow: `${rowOf(session.start)} / ${rowOf(session.end)}`,
-                    ...(isBreak || isHighlight
-                      ? {}
-                      : {
-                          borderColor: trackColor,
-                          background: session.track === "work" ? "#1f2b22" : session.track === "main" ? "#1f2433" : "var(--surface)",
-                        }),
-                  }}
-                >
-                  <div className={styles.sessionTop}>
-                    {!isBreak && (
-                      <span
-                        className={styles.kind}
-                        style={isHighlight ? undefined : { background: trackColor, borderColor: trackColor }}
-                      >
-                        {session.kind}
-                      </span>
-                    )}
-                    <span className={styles.range}>
-                      {session.start} – {session.end}
-                    </span>
-                    <span className={styles.duration}>{durationLabel(session.start, session.end)}</span>
+          {narrow ? (
+            <>
+              <p className={styles.trackNote}>
+                <span
+                  className={styles.headDot}
+                  style={{ background: TRACKS[effectiveFocus as TrackLabel].color }}
+                  aria-hidden="true"
+                />
+                {TRACKS[effectiveFocus as TrackLabel].blurb}
+              </p>
+              {/* Phones: one full-width list in time order, with the time leading each card. */}
+              <ol className={styles.list}>
+                {[...visible]
+                  .sort((a, b) => minutesOf(a.start) - minutesOf(b.start))
+                  .map((session) => (
+                    <li key={keyOf(session)}>{renderCard(session, true)}</li>
+                  ))}
+              </ol>
+            </>
+          ) : (
+            <>
+              <div className={styles.headRow} style={{ gridTemplateColumns: columns }}>
+                <span />
+                {headers.map((label) => (
+                  <div key={label} className={styles.head} data-dim={effectiveFocus !== "All" && effectiveFocus !== label ? "" : undefined}>
+                    <span className={styles.headDot} style={{ background: TRACKS[label].color }} aria-hidden="true" />
+                    {label}
+                    <span className={styles.headSub}>{TRACKS[label].blurb}</span>
                   </div>
-                  <div className={styles.sessionTitle}>{session.title}</div>
-                  {session.speaker && (
-                    <div className={styles.speaker}>
-                      <span className={styles.speakerAvatar} aria-hidden="true" />
-                      <span>{session.speaker}</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                ))}
+              </div>
+
+              <div
+                className={styles.grid}
+                style={{ gridTemplateColumns: columns, gridTemplateRows: `repeat(${ROWS}, minmax(30px, auto))` }}
+              >
+                {startTimes.map((time) => (
+                  <div key={time} className={styles.time} style={{ gridRow: `${rowOf(time)} / span 1` }}>
+                    {time}
+                  </div>
+                ))}
+
+                {visible.map((session) => (
+                  <Fragment key={keyOf(session)}>{renderCard(session, false)}</Fragment>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
     </>

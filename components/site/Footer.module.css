@@ -62,11 +62,20 @@
 .column {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0;
   font-size: 16px;
 }
 
+/* Taller hit area (44px) for thumbs; the text keeps the same spacing as before. */
+.column a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin: -4px 0;
+}
+
 .columnTitle {
+  margin-bottom: 8px;
   font-size: 13px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -86,8 +95,7 @@
 .logo {
   display: block;
   width: auto;
-  height: 44px;
-  margin-left: -18px;
+  height: 36px;
 }
 
 .socials {

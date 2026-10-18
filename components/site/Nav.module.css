@@ -30,25 +30,14 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
   min-width: 0;
+  padding-left: 6px;
 }
 
-.brand:hover {
-  color: var(--off-white);
-}
-
-.brand svg {
+.logo {
   display: block;
-  flex: none;
-}
-
-.brandName {
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
+  width: auto;
+  height: 22px;
 }
 
 .links {
@@ -89,6 +78,12 @@
   background: var(--yellow);
   border: 2px solid var(--off-white);
   border-radius: 999px;
+}
+
+.cta:hover,
+.sheetCta:hover {
+  color: var(--black);
+  filter: brightness(1.06);
 }
 
 .ctaDot {
@@ -171,6 +166,10 @@
 }
 
 @media (max-width: 899px) {
+  .logo {
+    height: 19px;
+  }
+
   .links,
   .cta {
     display: none;

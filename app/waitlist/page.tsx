@@ -11,6 +11,9 @@ import styles from "./page.module.css";
 export const metadata: Metadata = {
   title: "Waitlist",
   description: "Join the Cloud Community Day Pune 2026 waitlist and hear first when registrations open.",
+  // The same form now lives on the home page; keep this older link working but point search engines there.
+  alternates: { canonical: "/" },
+  robots: { index: false, follow: true },
 };
 
 export default function WaitlistPage() {

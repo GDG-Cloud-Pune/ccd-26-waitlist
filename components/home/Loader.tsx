@@ -5,7 +5,8 @@ import { isHeroReady, onHeroReady, setHeroHold } from "@/lib/hero-ready";
 import styles from "./Loader.module.css";
 
 const SEGMENT_COLORS = ["var(--blue)", "var(--green)", "var(--yellow)", "var(--red)"];
-const MAX_WAIT_MS = 8000;
+/** Never hold the page longer than this for the 3D Wada; it rises in on its own once ready. */
+const MAX_WAIT_MS = 2500;
 
 /** First-visit loading screen from the design: counts up, waits for the 3D hero, then lifts away. */
 export function Loader() {

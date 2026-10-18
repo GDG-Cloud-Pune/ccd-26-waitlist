@@ -1,43 +1,101 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
+import { Icon } from "@/components/brand/Icon";
+import { AfterFilm } from "@/components/home/AfterFilm";
 import { Countdown } from "@/components/home/Countdown";
 import { Faq } from "@/components/home/Faq";
 import { Hero3D } from "@/components/home/Hero3D";
 import { Loader } from "@/components/home/Loader";
-import { PhotoSlot } from "@/components/site/PhotoSlot";
 import { SpeakerCard } from "@/components/site/SpeakerCard";
 import { WaitlistForm } from "@/components/WaitlistForm";
-import { EDITIONS, FAQS, GALLERY, SPONSOR_TIERS } from "@/data/home";
+import { EDITIONS, FAQS, GALLERY, SPONSORS } from "@/data/home";
 import { FEATURED_SPEAKERS } from "@/data/speakers";
 import { EVENT } from "@/lib/event";
+import { SOCIAL_LINKS } from "@/lib/socials";
+import { SITE_URL, absoluteUrl } from "@/lib/site";
 import styles from "./page.module.css";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
+/** schema.org Event, so search engines can show the date and venue as an event listing. */
+const EVENT_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  name: `${EVENT.name} ${EVENT.city} ${EVENT.year}`,
+  description: `${EVENT.name} is ${EVENT.organiser}'s annual conference for developers building on Google Cloud and AI: main-stage talks and hands-on workshops.`,
+  startDate: EVENT.startsAt,
+  endDate: EVENT.endsAt,
+  eventStatus: "https://schema.org/EventScheduled",
+  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  url: SITE_URL,
+  image: [absoluteUrl("/og-image.png"), absoluteUrl(EVENT.afterFilm.poster)],
+  inLanguage: "en-IN",
+  location: {
+    "@type": "Place",
+    name: EVENT.venueName,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: EVENT.city,
+      addressRegion: EVENT.region,
+      addressCountry: "IN",
+    },
+  },
+  organizer: {
+    "@type": "Organization",
+    name: EVENT.organiser,
+    url: EVENT.communityUrl,
+    email: EVENT.contactEmail,
+    logo: absoluteUrl("/gdg-cloud-pune-logo.png"),
+    sameAs: SOCIAL_LINKS.map((social) => social.href),
+  },
+};
+
+const HOME_TRACKS = [
+  {
+    title: "Main Stage",
+    text: "Keynotes and talks on Google Cloud, AI and what teams are shipping in production.",
+    color: "var(--blue)",
+  },
+  {
+    title: "Workshops",
+    text: "Laptop-open, hands-on sessions led by practitioners. Limited seats per workshop.",
+    color: "var(--green)",
+  },
+];
+
+const GALLERY_ROWS = [GALLERY.filter((_, i) => i % 2 === 0), GALLERY.filter((_, i) => i % 2 === 1)];
+
+/** Attendance is drawn as dots, one per this many people, on a grid sized for the biggest edition. */
+const PEOPLE_PER_DOT = 50;
+const DOT_COUNT = Math.ceil(Math.max(...EDITIONS.map((edition) => edition.attendance)) / PEOPLE_PER_DOT);
 
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        // Escaping "<" keeps the JSON from ever closing the script tag early.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(EVENT_JSON_LD).replace(/</g, "\\u003c") }}
+      />
       <Loader />
 
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
-            <div className={styles.pills}>
-              <span className={styles.pillSolid}>{EVENT.edition}</span>
-              <span className={styles.pill}>by {EVENT.organiser}</span>
-            </div>
+            <span className={styles.pillSolid}>{EVENT.edition}</span>
 
             <h1 className={styles.title}>
-              Cloud
-              <br />
-              Community Day
+              <span className={styles.titleLine}>Cloud</span>{" "}
+              <span className={styles.titleLine}>Community Day</span>
             </h1>
 
-            <p className={styles.lede}>
-              One day of Google Cloud and AI — main-stage talks and hands-on workshops, built by the community, for the
-              community.
-            </p>
-
             <div className={styles.badges}>
-              <span className={styles.badgeSolid}>{EVENT.year}</span>
               <span className={styles.badgeGhost}>{EVENT.city}</span>
+              <span className={styles.badgeSolid}>{EVENT.year}</span>
               <div className={styles.colorBar} aria-hidden="true">
                 <span style={{ background: "var(--blue)" }} />
                 <span style={{ background: "var(--green)" }} />
@@ -45,6 +103,11 @@ export default function HomePage() {
                 <span style={{ background: "var(--red)" }} />
               </div>
             </div>
+
+            <p className={styles.lede}>
+              One day of Google Cloud and AI: main-stage talks and hands-on workshops, built by the community, for the
+              community.
+            </p>
 
             <div className={styles.facts}>
               <div className={styles.fact}>
@@ -59,25 +122,21 @@ export default function HomePage() {
 
             <Countdown />
 
-            <div className={styles.ctaRow}>
-              <a href="#waitlist" className={styles.ctaNotice}>
-                <span>{EVENT.registrationLabel}</span>
-                <span className={styles.ctaNoticeTag}>Join the waitlist</span>
-              </a>
-              <Link href="/agenda" className={styles.ghostButton}>
-                View agenda <span aria-hidden="true">→</span>
-              </Link>
-            </div>
+            <a href="#waitlist" className={styles.heroButton}>
+              Join the waitlist <Icon name="arrow-down" />
+            </a>
           </div>
 
-          <div className={styles.heroArt}>
+          {/* The Wada is framed in this column; the 3D scene itself runs under the whole hero. */}
+          <div className={styles.heroArt} data-hero-focus>
             <div className={styles.heroArtInner} data-parallax="0.08">
               <Hero3D />
             </div>
-            <span className={styles.dragHint}>↔ Drag to rotate</span>
+            <span className={styles.dragHint}>
+              <Icon name="move-horizontal" size={16} /> Drag to rotate
+            </span>
           </div>
         </div>
-        <div className={styles.heroRule} aria-hidden="true" />
       </section>
 
       <section id="waitlist" className={styles.waitlist}>
@@ -88,7 +147,7 @@ export default function HomePage() {
               Be first in line when <span className={styles.yellow}>registrations open.</span>
             </h2>
             <p className={styles.body}>
-              We&rsquo;ll email you the moment tickets go live — no other mail, no sharing your details.
+              We&rsquo;ll email you the moment tickets go live. No other mail, and we never share your details.
             </p>
           </div>
           <div className={styles.waitlistCard} data-reveal="120">
@@ -108,7 +167,7 @@ export default function HomePage() {
             </div>
             <p data-reveal="120" className={styles.body}>
               {EVENT.name} is {EVENT.organiser}&rsquo;s annual conference for developers building on Google Cloud and AI.
-              We grew fast, then chose depth over scale — and the fifth edition keeps what worked: one day, two tracks,
+              We grew fast, then chose depth over scale, and the fifth edition keeps what worked: one day, two tracks,
               main-stage talks and hands-on workshops.
             </p>
           </div>
@@ -122,26 +181,34 @@ export default function HomePage() {
                   data-reveal={i * 90}
                   className={styles.editionCard}
                   data-current={isCurrent ? "" : undefined}
-                  style={isCurrent ? undefined : { background: edition.color, color: "var(--black)" }}
+                  style={isCurrent ? undefined : { background: edition.color, color: "var(--ink)" }}
                 >
                   <div className={styles.editionTop}>
                     <span className={styles.editionNum}>{edition.num}</span>
                     <span className={styles.editionYear}>{edition.year}</span>
                   </div>
-                  <div className={styles.editionBarWrap}>
+                  <p className={styles.editionNote}>{edition.note}</p>
+                  {/*
+                    Turnout as dots, one per 50 people. The chart and number sit on the bottom edge,
+                    so they line up across cards however long each note runs.
+                  */}
+                  <div className={styles.editionChart} aria-hidden="true">
                     {isCurrent ? (
                       <div className={styles.editionBarCurrent} />
                     ) : (
-                      <div
-                        className={styles.editionBar}
-                        style={{ height: Math.round((120 * edition.attendance) / 1000) }}
-                      />
+                      <div className={styles.editionDots}>
+                        {Array.from({ length: DOT_COUNT }, (_, d) => (
+                          <span
+                            key={d}
+                            className={styles.personDot}
+                            data-filled={d < Math.round(edition.attendance / PEOPLE_PER_DOT) ? "" : undefined}
+                            style={{ "--i": d } as CSSProperties}
+                          />
+                        ))}
+                      </div>
                     )}
                   </div>
-                  <div className={styles.editionFoot}>
-                    <div className={styles.editionCount}>{edition.count}</div>
-                    <div className={styles.editionNote}>{edition.note}</div>
-                  </div>
+                  <div className={styles.editionCount}>{edition.count}</div>
                 </div>
               );
             })}
@@ -149,24 +216,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className={styles.section}>
-        <div className={styles.sectionInner}>
-          <div data-reveal="0" className={styles.sectionHead}>
-            <div className={styles.sectionHeadStack}>
-              <span className={styles.eyebrow}>Speakers</span>
-              <h2 className={styles.h2}>Who&rsquo;s on stage</h2>
+      {/* Hidden until the line-up is final: flip EVENT.speakersAnnounced in lib/event.ts. */}
+      {EVENT.speakersAnnounced && (
+        <section className={styles.section}>
+          <div className={styles.sectionInner}>
+            <div data-reveal="0" className={styles.sectionHead}>
+              <div className={styles.sectionHeadStack}>
+                <span className={styles.eyebrow}>Speakers</span>
+                <h2 className={styles.h2}>Who&rsquo;s on stage</h2>
+              </div>
+              <Link href="/speakers" className={styles.ghostButton}>
+                All speakers <Icon name="arrow-right" />
+              </Link>
             </div>
-            <Link href="/speakers" className={styles.ghostButton}>
-              All speakers <span aria-hidden="true">→</span>
-            </Link>
+            <div className={styles.speakerGrid}>
+              {FEATURED_SPEAKERS.map((speaker, i) => (
+                <SpeakerCard key={speaker.id} speaker={speaker} delay={i * 90} />
+              ))}
+            </div>
           </div>
-          <div className={styles.speakerGrid}>
-            {FEATURED_SPEAKERS.map((speaker, i) => (
-              <SpeakerCard key={speaker.id} speaker={speaker} delay={i * 90} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className={styles.section}>
         <div className={styles.sectionInner}>
@@ -175,35 +245,38 @@ export default function HomePage() {
               <span className={styles.eyebrow}>Agenda</span>
               <h2 className={styles.h2}>Two tracks, one day</h2>
             </div>
-            <Link href="/agenda" className={styles.ghostButton}>
-              Full agenda <span aria-hidden="true">→</span>
-            </Link>
+{EVENT.agendaPublished && (
+              <Link href="/agenda" className={styles.ghostButton}>
+                Full agenda <Icon name="arrow-right" />
+              </Link>
+            )}
           </div>
           <div className={styles.trackGrid}>
-            <Link href="/agenda" data-reveal="0" className={styles.trackCard} style={{ background: "var(--blue)" }}>
-              <div className={styles.trackTop}>
-                <span className={styles.trackTag}>Track 01</span>
-                <span aria-hidden="true">→</span>
-              </div>
-              <div className={styles.trackBody}>
-                <div className={styles.trackTitle}>Main Stage</div>
-                <div className={styles.trackText}>
-                  Keynotes and talks on Google Cloud, AI and what teams are shipping in production.
+            {HOME_TRACKS.map((track, i) => {
+              const content = (
+                <>
+                  <div className={styles.trackTop}>
+                    <span className={styles.trackTag}>Track {String(i + 1).padStart(2, "0")}</span>
+                    {EVENT.agendaPublished && <Icon name="arrow-right" size={30} />}
+                  </div>
+                  <div className={styles.trackBody}>
+                    <div className={styles.trackTitle}>{track.title}</div>
+                    <div className={styles.trackText}>{track.text}</div>
+                  </div>
+                </>
+              );
+              const props = { "data-reveal": i * 120, className: styles.trackCard, style: { background: track.color } };
+              // Cards link to the agenda once it's published; until then they're plain cards.
+              return EVENT.agendaPublished ? (
+                <Link key={track.title} href="/agenda" {...props}>
+                  {content}
+                </Link>
+              ) : (
+                <div key={track.title} {...props}>
+                  {content}
                 </div>
-              </div>
-            </Link>
-            <Link href="/agenda" data-reveal="120" className={styles.trackCard} style={{ background: "var(--green)" }}>
-              <div className={styles.trackTop}>
-                <span className={styles.trackTag}>Track 02</span>
-                <span aria-hidden="true">→</span>
-              </div>
-              <div className={styles.trackBody}>
-                <div className={styles.trackTitle}>Workshops</div>
-                <div className={styles.trackText}>
-                  Laptop-open, hands-on sessions led by practitioners. Limited seats per workshop.
-                </div>
-              </div>
-            </Link>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -216,35 +289,62 @@ export default function HomePage() {
           </div>
           <div className={styles.cfsSide}>
             <p className={styles.cfsText}>
-              We&rsquo;re looking for talks and workshops on Google Cloud, AI, data and DevOps — from first-time speakers
-              too. Submissions open soon.
+              We&rsquo;re looking for talks and workshops on Google Cloud, AI, data and DevOps, and first-time
+              speakers are welcome too. Submissions open soon.
             </p>
-            <span className={styles.darkPill}>
-              <span className={styles.dot} aria-hidden="true" />
+            <span className={styles.statusLabel}>
+              <span className={styles.statusDot} aria-hidden="true" />
               Opening soon
             </span>
           </div>
         </div>
       </section>
 
-      <section className={styles.section}>
+      {EVENT.afterFilm.youtubeId && (
+        <section className={styles.section}>
+          <div className={styles.sectionInner}>
+            <div data-reveal="0" className={styles.sectionHeadStack}>
+              <span className={styles.eyebrow}>The film</span>
+              <h2 className={styles.h2}>
+                Relive <span className={styles.yellow}>{EVENT.afterFilm.year}.</span>
+              </h2>
+            </div>
+            <div data-reveal="120">
+              <AfterFilm
+                videoId={EVENT.afterFilm.youtubeId}
+                title={`${EVENT.name} ${EVENT.afterFilm.year}, the film`}
+                poster={EVENT.afterFilm.poster}
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className={styles.gallerySection}>
         <div className={styles.sectionInner}>
           <div data-reveal="0" className={styles.sectionHeadStack}>
             <span className={styles.eyebrow}>Gallery</span>
             <h2 className={styles.h2}>From past editions</h2>
           </div>
-          <div className={styles.galleryGrid}>
-            {GALLERY.map((item, i) => (
-              <div
-                key={item.id}
-                data-reveal={(i % 3) * 80}
-                className={styles.galleryCell}
-                style={{ gridColumn: `span ${item.colSpan}`, gridRow: `span ${item.rowSpan}` }}
-              >
-                <PhotoSlot label={item.label} sizes="(max-width: 900px) 100vw, 400px" />
-              </div>
-            ))}
-          </div>
+        </div>
+        {/* Two rows drifting in opposite directions; each row is drawn three times so the loop never shows a gap. */}
+        <div className={styles.marquee} data-reveal="120">
+          {GALLERY_ROWS.map((row, r) => (
+            <div key={r} className={styles.marqueeRow} data-reverse={r === 1 ? "" : undefined}>
+              {[0, 1, 2].flatMap((copy) =>
+                row.map((photo) => (
+                  <figure
+                    key={`${photo.id}-${copy}`}
+                    className={styles.marqueeItem}
+                    style={{ aspectRatio: `${photo.width} / ${photo.height}` }}
+                    aria-hidden={copy > 0 || undefined}
+                  >
+                    <Image src={photo.src} alt={copy > 0 ? "" : photo.alt} fill sizes="480px" />
+                  </figure>
+                )),
+              )}
+            </div>
+          ))}
         </div>
       </section>
 
@@ -256,22 +356,27 @@ export default function HomePage() {
               <h2 className={styles.h2}>Made possible by</h2>
             </div>
             <a href={`mailto:${EVENT.contactEmail}`} className={styles.ghostButton}>
-              Become a sponsor <span aria-hidden="true">→</span>
+              Become a sponsor <Icon name="arrow-right" />
             </a>
           </div>
-          {SPONSOR_TIERS.map((tier) => (
-            <div key={tier.name} data-reveal="0" className={styles.tierRow}>
-              <span className={styles.tierName}>{tier.name}</span>
-              <div
-                className={styles.tierGrid}
-                style={{ gridTemplateColumns: `repeat(auto-fill,minmax(min(100%,${tier.minWidth}px),1fr))` }}
+          {SPONSORS.map((sponsor) => (
+            <div key={sponsor.name} data-reveal="0" className={styles.tierRow}>
+              <span className={styles.tierName}>{sponsor.tier}</span>
+              <a
+                href={sponsor.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.sponsorCard}
+                data-logo={sponsor.logo ? "" : undefined}
+                aria-label={`${sponsor.name} (opens in a new tab)`}
               >
-                {Array.from({ length: tier.slots }, (_, i) => (
-                  <div key={i} className={styles.tierCell} style={{ height: tier.height }}>
-                    <span className={styles.tierPlaceholder}>Sponsor logo</span>
-                  </div>
-                ))}
-              </div>
+                {sponsor.logo ? (
+                  // SVG logos are served as-is; the image optimiser only handles raster formats.
+                  <Image src={sponsor.logo} alt="" fill unoptimized className={styles.sponsorLogo} />
+                ) : (
+                  <span className={styles.sponsorName}>{sponsor.name}</span>
+                )}
+              </a>
             </div>
           ))}
         </div>

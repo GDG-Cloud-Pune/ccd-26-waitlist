@@ -1,15 +1,24 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Timetable } from "@/components/agenda/Timetable";
 import { SESSIONS } from "@/data/agenda";
 import { EVENT } from "@/lib/event";
+import { sharePreview } from "@/lib/site";
 import styles from "./page.module.css";
+
+const description = `The running order for ${EVENT.name} ${EVENT.year}: main-stage talks and hands-on workshops on ${EVENT.dateLong}.`;
 
 export const metadata: Metadata = {
   title: "Agenda",
-  description: `The running order for ${EVENT.name} ${EVENT.year}: main-stage talks and hands-on workshops on ${EVENT.dateLong}.`,
+  description,
+  alternates: { canonical: "/agenda" },
+  ...sharePreview(`Agenda · ${EVENT.name} ${EVENT.year}`, description, "/agenda"),
 };
 
 export default function AgendaPage() {
+  // Hidden until the running order is final: flip EVENT.agendaPublished in lib/event.ts.
+  if (!EVENT.agendaPublished) notFound();
+
   return (
     <>
       <section className={styles.header}>

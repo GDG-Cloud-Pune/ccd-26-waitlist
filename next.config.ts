@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const isDev = process.env.NODE_ENV !== "production";
 
 // Fonts are self-hosted by next/font, and the form only talks to its own API route.
+// The only third party is YouTube's privacy-enhanced player, framed after a visitor presses play.
 // Next.js injects inline hydration scripts, so script-src needs 'unsafe-inline' without nonces.
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -10,6 +11,7 @@ const contentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
+  "frame-src https://www.youtube-nocookie.com",
   `connect-src 'self'${isDev ? " ws: wss:" : ""}`,
   "object-src 'none'",
   "base-uri 'self'",

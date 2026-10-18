@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { Icon } from "@/components/brand/Icon";
 import styles from "./Faq.module.css";
 
 type FaqProps = { items: { q: string; a: string }[] };
@@ -28,7 +29,7 @@ export function Faq({ items }: FaqProps) {
               >
                 <span>{item.q}</span>
                 <span className={styles.icon} data-open={isOpen ? "" : undefined} aria-hidden="true">
-                  +
+                  <Icon name="plus" size={18} />
                 </span>
               </button>
             </h3>

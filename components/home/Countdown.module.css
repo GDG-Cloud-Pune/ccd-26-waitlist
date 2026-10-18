@@ -31,3 +31,23 @@
   text-transform: uppercase;
   color: var(--muted);
 }
+
+/* Phones: four equal boxes on one row instead of wrapping the seconds. */
+@media (max-width: 480px) {
+  .row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .cell {
+    min-width: 0;
+    padding: 12px 4px 10px;
+    border-radius: 18px;
+  }
+
+  .label {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+}

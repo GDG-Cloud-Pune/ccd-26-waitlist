@@ -206,9 +206,72 @@
   flex: none;
   width: 28px;
   height: 28px;
-  border: 2px solid currentColor;
+  /* Dashed until a real speaker photo exists: reads as "to come", not as a broken image. */
+  border: 2px dashed currentColor;
   border-radius: 99px;
   opacity: 0.6;
+}
+
+/* ─── Phones: stacked full-width cards ─────────────────────────────────── */
+.trackNote {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.session[data-stacked] {
+  gap: 12px;
+  padding: 18px 20px 16px;
+}
+
+.session[data-stacked][data-break] {
+  gap: 8px;
+  padding: 16px 20px;
+}
+
+.stackTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* The start time leads the card; the end time sits beside it, quieter. */
+.clock {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.clockStart {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.clockEnd {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+.clockEnd {
+  white-space: nowrap;
 }
 
 @media (max-width: 640px) {
@@ -226,5 +289,13 @@
     flex: 1;
     justify-content: center;
     padding: 11px 10px;
+  }
+}
+
+/* Phones: track switch buttons get a full 44px thumb target. */
+@media (max-width: 759px) {
+  .filter {
+    min-height: 44px;
+    justify-content: center;
   }
 }

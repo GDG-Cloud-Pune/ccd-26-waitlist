@@ -4,6 +4,7 @@
   display: block;
 }
 
+/* Inset 0 unless Hero3D places it over the focus area. */
 .fallback {
   position: absolute;
   inset: 0;

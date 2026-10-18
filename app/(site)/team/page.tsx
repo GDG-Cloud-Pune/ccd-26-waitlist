@@ -1,17 +1,27 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Icon } from "@/components/brand/Icon";
 import { PhotoSlot } from "@/components/site/PhotoSlot";
 import { ORGANISERS, VOLUNTEERS } from "@/data/team";
 import { EVENT } from "@/lib/event";
+import { sharePreview } from "@/lib/site";
 import styles from "./page.module.css";
+
+const description = `The ${EVENT.organiser} members and volunteers who organise ${EVENT.name}.`;
 
 export const metadata: Metadata = {
   title: "Team",
-  description: `The ${EVENT.organiser} members and volunteers who organise ${EVENT.name}.`,
+  description,
+  alternates: { canonical: "/team" },
+  ...sharePreview(`Team · ${EVENT.name} ${EVENT.year}`, description, "/team"),
 };
 
 const CHIP_COLORS = ["var(--blue)", "var(--green)", "var(--yellow)", "var(--red)"];
 
 export default function TeamPage() {
+  // Hidden until the team line-up is final: flip EVENT.teamPublished in lib/event.ts.
+  if (!EVENT.teamPublished) notFound();
+
   return (
     <>
       <section className={styles.header}>
@@ -85,7 +95,7 @@ export default function TeamPage() {
         <div data-reveal="0" className={styles.ctaCard}>
           <h2 className={styles.ctaTitle}>Want to help run CCD?</h2>
           <a href={`mailto:${EVENT.contactEmail}`} className={styles.ctaButton}>
-            Get in touch <span aria-hidden="true">→</span>
+            Get in touch <Icon name="arrow-right" />
           </a>
         </div>
       </section>

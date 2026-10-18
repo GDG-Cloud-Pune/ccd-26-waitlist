@@ -51,11 +51,11 @@ export function Footer() {
 
         <div className={styles.bottom}>
           <Image
-            src="/assets/gdg-cloud-pune.png"
+            src="/gdg-cloud-pune-logo.png"
             alt={EVENT.organiser}
-            width={400}
-            height={88}
-            sizes="200px"
+            width={1692}
+            height={203}
+            sizes="300px"
             className={styles.logo}
           />
           <ul className={styles.socials}>

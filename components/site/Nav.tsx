@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -27,16 +28,16 @@ export function Nav() {
       <div className={styles.wrap}>
         <nav className={styles.bar} aria-label="Main">
           <Link href="/" className={styles.brand} aria-label={`${EVENT.name} home`}>
-            <svg viewBox="0 0 120 80" width="48" height="32" aria-hidden="true" focusable="false">
-              <path
-                d="M30 70 H95 A20 20 0 0 0 95 30 A25 25 0 0 0 48 22 A18 18 0 0 0 30 34 A18 18 0 0 0 30 70 Z"
-                fill="var(--blue)"
-                stroke="var(--off-white)"
-                strokeWidth={5}
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span className={styles.brandName}>{EVENT.name}</span>
+            <Image
+              src="/gdg-cloud-pune-logo.png"
+              alt=""
+              width={1692}
+              height={203}
+              // Matches the CSS heights below (22px / 19px tall at 8.33:1).
+              sizes="(max-width: 899px) 160px, 184px"
+              priority
+              className={styles.logo}
+            />
           </Link>
 
           <div className={styles.links}>
@@ -47,10 +48,11 @@ export function Nav() {
             ))}
           </div>
 
-          <span className={styles.cta}>
+          {/* Until registrations open, the pill takes people to the waitlist form. */}
+          <Link href="/#waitlist" className={styles.cta}>
             <span className={styles.ctaDot} aria-hidden="true" />
             {EVENT.registrationLabel}
-          </span>
+          </Link>
 
           <button
             type="button"
@@ -72,7 +74,9 @@ export function Nav() {
             {label}
           </Link>
         ))}
-        <span className={styles.sheetCta}>{EVENT.registrationLabel}</span>
+        <Link href="/#waitlist" className={styles.sheetCta} tabIndex={open ? undefined : -1}>
+          {EVENT.registrationLabel}
+        </Link>
       </div>
     </>
   );

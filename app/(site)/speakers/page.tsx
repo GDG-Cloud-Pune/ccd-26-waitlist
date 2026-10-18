@@ -1,15 +1,24 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { SpeakersGrid } from "@/components/speakers/SpeakersGrid";
 import { SPEAKERS } from "@/data/speakers";
 import { EVENT } from "@/lib/event";
+import { sharePreview } from "@/lib/site";
 import styles from "./page.module.css";
+
+const description = `Speakers at ${EVENT.name} ${EVENT.year}: practitioners from across the Google Cloud and AI community.`;
 
 export const metadata: Metadata = {
   title: "Speakers",
-  description: `Speakers at ${EVENT.name} ${EVENT.year} — practitioners from across the Google Cloud and AI community.`,
+  description,
+  alternates: { canonical: "/speakers" },
+  ...sharePreview(`Speakers · ${EVENT.name} ${EVENT.year}`, description, "/speakers"),
 };
 
 export default function SpeakersPage() {
+  // Hidden until the line-up is final: flip EVENT.speakersAnnounced in lib/event.ts.
+  if (!EVENT.speakersAnnounced) notFound();
+
   return (
     <>
       <section className={styles.header}>

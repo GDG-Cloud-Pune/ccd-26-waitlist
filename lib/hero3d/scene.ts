@@ -1,4 +1,5 @@
 import type * as THREE from "three";
+import { boxWithin } from "@/lib/layout-box";
 import {
   buildWada,
   cloudGeometries,
@@ -21,6 +22,11 @@ import {
 
 export type HeroSceneOptions = {
   view: ViewName;
+  /**
+   * The area the Wada is framed within. The scene still draws across the whole
+   * container, so the grid and clouds carry on past it instead of being cut off.
+   */
+  focus?: HTMLElement | null;
   colors: PaletteName;
   /** While this returns true (the loader is up) the entrance animation waits. */
   isHeld?: () => boolean;
@@ -40,6 +46,10 @@ const backOut = (t: number) => {
   return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2);
 };
 
+const BASE_FOV = 34;
+/** Upper bound on drawn pixels, since the canvas can now cover the whole hero. */
+const MAX_PIXELS = 4_500_000;
+
 export async function createHeroScene(container: HTMLElement, options: HeroSceneOptions): Promise<HeroScene | null> {
   const T = await import("three");
 
@@ -53,7 +63,7 @@ export async function createHeroScene(container: HTMLElement, options: HeroScene
     return null; // No WebGL — the caller shows the flat drawing instead.
   }
 
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lite ? 1.5 : 2));
+  const maxPixelRatio = Math.min(window.devicePixelRatio || 1, lite ? 1.5 : 2);
   if (!lite) {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = T.PCFSoftShadowMap;
@@ -69,11 +79,12 @@ export async function createHeroScene(container: HTMLElement, options: HeroScene
   scene.background = new T.Color(0x1e1e1e);
   scene.fog = new T.Fog(0x1e1e1e, 60, 120);
 
-  const camera = new T.PerspectiveCamera(34, 1, 0.1, 300);
+  const camera = new T.PerspectiveCamera(BASE_FOV, 1, 0.1, 300);
   const root = new T.Group();
   scene.add(root);
 
-  const grid = new T.GridHelper(90, 45, 0x3a3a3a, 0x2a2a2a);
+  // Wide enough to run under the whole hero; the fog fades it out with distance.
+  const grid = new T.GridHelper(240, 120, 0x3a3a3a, 0x2a2a2a);
   const gridMaterial = grid.material as THREE.Material;
   gridMaterial.transparent = true;
   gridMaterial.opacity = 0.55;
@@ -101,7 +112,7 @@ export async function createHeroScene(container: HTMLElement, options: HeroScene
   rim.position.set(16, 8, -18);
   scene.add(rim);
 
-  const ground = new T.Mesh(new T.PlaneGeometry(120, 120), new T.ShadowMaterial({ opacity: 0.5 }));
+  const ground = new T.Mesh(new T.PlaneGeometry(300, 300), new T.ShadowMaterial({ opacity: 0.5 }));
   ground.rotation.x = -Math.PI / 2;
   ground.receiveShadow = true;
   root.add(ground);
@@ -176,7 +187,17 @@ export async function createHeroScene(container: HTMLElement, options: HeroScene
 
   const heroCloud = makeCloud(1.15, true);
   root.add(heroCloud);
-  const driftingClouds = ([[-12, 15, -24, 1.8, 0.25], [6, 22, -34, 2.4, 0.18], [3, 20, -38, 2, 0.14]] as const).map(
+  const CLOUD_WRAP = 110;
+  const driftingClouds = (
+    [
+      [-74, 19, -32, 2.2, 0.2],
+      [-40, 24, -46, 2.6, 0.16],
+      [-12, 15, -24, 1.8, 0.25],
+      [6, 22, -34, 2.4, 0.18],
+      [34, 19, -40, 2.1, 0.14],
+      [66, 23, -50, 2.8, 0.12],
+    ] as const
+  ).map(
     ([x, y, z, scale, speed]) => {
       const cloud = makeCloud(scale, false);
       cloud.position.set(x, y, z);
@@ -206,7 +227,12 @@ export async function createHeroScene(container: HTMLElement, options: HeroScene
     raf: 0,
   };
 
+  /** Last pointer activity, so the scene only runs at full frame rate while someone is interacting. */
+  let lastInput = 0;
+  let idleTick = 0;
+
   const onPointerMove = (e: PointerEvent) => {
+    lastInput = performance.now();
     state.mx = (e.clientX / window.innerWidth) * 2 - 1;
     state.my = (e.clientY / window.innerHeight) * 2 - 1;
     if (state.dragging) {
@@ -247,13 +273,26 @@ export async function createHeroScene(container: HTMLElement, options: HeroScene
     if (!w || !h) return;
     state.width = w;
     state.height = h;
+    renderer.setPixelRatio(Math.max(1, Math.min(maxPixelRatio, Math.sqrt(MAX_PIXELS / (w * h)))));
     renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    const vFov = (camera.fov * Math.PI) / 180;
-    const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
-    const distance = Math.max(v.width / Math.tan(hFov / 2), v.height / Math.tan(vFov / 2));
+
+    // Frame the Wada within the focus area, as if the canvas were only that big...
+    const focus = options.focus ? boxWithin(options.focus, container) : { x: 0, y: 0, width: w, height: h };
+    const fw = Math.max(1, focus.width);
+    const fh = Math.max(1, focus.height);
+    const halfV = Math.tan((BASE_FOV * Math.PI) / 360);
+    const distance = Math.max(v.width / (halfV * (fw / fh)), v.height / halfV);
     camera.position.copy(target).addScaledVector(direction, distance);
     camera.lookAt(target);
+
+    // ...then widen the frustum to the full canvas, keeping the focus centre on the camera axis.
+    const cx = focus.x + fw / 2;
+    const cy = focus.y + fh / 2;
+    const fullW = 2 * Math.max(cx, w - cx);
+    const fullH = 2 * Math.max(cy, h - cy);
+    camera.fov = Math.min(170, (2 * Math.atan(halfV * (fullH / fh)) * 180) / Math.PI);
+    camera.aspect = fullW / fullH;
+    camera.setViewOffset(fullW, fullH, fullW / 2 - cx, fullH / 2 - cy, w, h);
     camera.far = distance + 140;
     camera.updateProjectionMatrix();
     scene.fog = new T.Fog(0x1e1e1e, distance + 14, distance + 80);
@@ -289,10 +328,11 @@ export async function createHeroScene(container: HTMLElement, options: HeroScene
         }
       }
       root.rotation.y = state.rot + state.tx * 0.2 + Math.sin(t * 0.25) * 0.04;
-      root.rotation.x = state.ty * 0.03;
+      // Kept small: the grid runs under the whole hero, so its far edge swings a long way per degree.
+      root.rotation.x = state.ty * 0.0018;
       driftingClouds.forEach((cloud) => {
         cloud.position.x += (cloud.userData.speed as number) * dt;
-        if (cloud.position.x > 40) cloud.position.x = -40;
+        if (cloud.position.x > CLOUD_WRAP) cloud.position.x = -CLOUD_WRAP;
       });
     }
 
@@ -306,6 +346,7 @@ export async function createHeroScene(container: HTMLElement, options: HeroScene
 
   const resizeObserver = new ResizeObserver(fit);
   resizeObserver.observe(container);
+  if (options.focus) resizeObserver.observe(options.focus);
   fit();
 
   const intersectionObserver = new IntersectionObserver((entries) => {
@@ -316,7 +357,16 @@ export async function createHeroScene(container: HTMLElement, options: HeroScene
   if (!reducedMotion) {
     const loop = (now: number) => {
       state.raf = requestAnimationFrame(loop);
-      if (state.visible) frame(now);
+      if (!state.visible) return;
+      // Full rate during the entrance, a drag, its inertia and recent pointer movement;
+      // otherwise only the clouds drift, which looks the same at half the GPU work.
+      const busy =
+        now - state.t0 < 5000 ||
+        state.dragging ||
+        Math.abs(state.vel) > 1e-4 ||
+        now - state.lastDrag < 3000 ||
+        now - lastInput < 1500;
+      if (busy || idleTick++ % 2 === 0) frame(now);
     };
     state.raf = requestAnimationFrame(loop);
   }

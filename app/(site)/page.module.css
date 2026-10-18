@@ -8,17 +8,32 @@
   overflow: hidden;
 }
 
+/* Fades the grid and clouds into the next section, so the hero has no hard bottom edge. */
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 160px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgb(30 30 30 / 0), var(--black));
+}
+
 .heroInner {
   width: 100%;
   max-width: var(--container);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px 40px;
   align-items: center;
 }
 
 .heroCopy {
   position: relative;
+  container-type: inline-size;
+  min-width: 0;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -26,34 +41,31 @@
   padding: 24px 0 64px;
 }
 
-.pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.pill,
 .pillSolid {
+  align-self: flex-start;
   padding: 8px 16px;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1;
+  color: var(--black);
+  background: var(--yellow);
   border: 2px solid var(--off-white);
   border-radius: 999px;
 }
 
-.pillSolid {
-  font-weight: 600;
-  color: var(--black);
-  background: var(--yellow);
-}
-
 .title {
   margin: 0;
-  font-size: clamp(56px, 8.6vw, 124px);
+  /* "Community Day" is ~6.9em wide; size it to the copy column so each line stays on one line. */
+  font-size: clamp(40px, 5.8vw, 84px);
+  font-size: min(124px, 14cqi);
   font-weight: 700;
-  line-height: 0.88;
+  line-height: 0.92;
   letter-spacing: -0.04em;
+}
+
+.titleLine {
+  display: block;
+  white-space: nowrap;
 }
 
 .lede {
@@ -67,7 +79,6 @@
 
 .badges {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 14px;
 }
@@ -88,11 +99,14 @@
   background: var(--off-white);
 }
 
+/* Takes whatever room the two pills leave, so the row never wraps. */
 .colorBar {
+  flex: 1;
   display: flex;
   gap: 8px;
   height: 16px;
-  width: clamp(160px, 18vw, 240px);
+  min-width: 96px;
+  max-width: 240px;
 }
 
 .colorBar > span {
@@ -126,39 +140,26 @@
   font-weight: 600;
 }
 
-.ctaRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.ctaNotice {
-  display: flex;
+.heroButton {
+  align-self: flex-start;
+  display: inline-flex;
   align-items: center;
-  gap: 14px;
-  padding: 5px 6px 5px 22px;
-  font-size: 19px;
+  gap: 10px;
+  padding: 14px 24px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 1;
-  color: var(--off-white);
+  /* Dark text: white on brand blue is only 3.1:1. */
+  color: var(--ink);
   background: var(--blue);
   border: 3px solid var(--off-white);
   border-radius: 999px;
   transition: filter 0.25s ease;
 }
 
-.ctaNotice:hover {
-  color: var(--off-white);
+.heroButton:hover {
+  color: var(--ink);
   filter: brightness(1.08);
-}
-
-.ctaNoticeTag {
-  padding: 10px 16px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--black);
-  background: var(--off-white);
-  border-radius: 999px;
 }
 
 .ghostButton {
@@ -185,13 +186,12 @@
   min-height: clamp(380px, 52vw, 720px);
 }
 
+/* Phones and tablets: a full-width band under the text, fading in at the top. */
 .heroArtInner {
   position: absolute;
-  top: -40px;
-  bottom: -40px;
-  left: -40px;
-  right: calc(-1 * max(var(--gutter), (100vw - var(--container)) / 2));
-  will-change: transform;
+  z-index: 0;
+  inset: -40px calc(-1 * var(--gutter));
+  mask-image: linear-gradient(to bottom, transparent, #000 96px);
 }
 
 .dragHint {
@@ -212,14 +212,83 @@
   border-radius: 999px;
 }
 
-.heroRule {
-  position: absolute;
-  z-index: 3;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 3px;
-  background: var(--off-white);
+/* Phones and tablets: the Wada band hugs the model instead of leaving empty space around it. */
+@media (max-width: 1047px) {
+  .hero {
+    min-height: 0;
+    /* Room for the drag hint, which sits just below the Wada. */
+    padding-bottom: calc(5vw + 56px);
+  }
+
+  .hero::after {
+    height: 48px;
+  }
+
+  .heroCopy {
+    padding-bottom: 0;
+  }
+
+  /* Matches the Wada's wide, short shape (with its clouds) so the camera frames it snugly. */
+  /*
+   * The camera draws the model about 19% of the band's height below centre,
+   * so pull the band up by that much (margin % is of the width: 19% × 9/16).
+   */
+  .heroArt {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    margin-top: -10.5%;
+  }
+
+  .heroArtInner {
+    inset: -56px calc(-1 * var(--gutter)) -24px;
+    mask-image: linear-gradient(to bottom, transparent, #000 56px);
+  }
+
+  /* The model's base dips ~9% below the band, so clear it. */
+  .dragHint {
+    top: calc(109% + 12px);
+    bottom: auto;
+  }
+}
+
+/* Side by side once there's room; the Wada gets the wider share since it's wide and short. */
+@media (min-width: 1048px) {
+  .heroInner {
+    grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+  }
+
+  /* The text sits over the 3D scene: empty gaps let drags through to rotate the Wada. */
+  .heroCopy {
+    pointer-events: none;
+  }
+
+  .heroCopy > * {
+    pointer-events: auto;
+  }
+
+  /* Static, so the scene below is laid out against the whole hero, edge to edge. */
+  .heroArt {
+    position: static;
+  }
+
+  .heroArtInner {
+    inset: 0;
+    mask-image: none;
+  }
+
+  /* Keeps the text readable where clouds drift behind it, without hiding the grid. */
+  .hero::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgb(30 30 30 / 0.7), rgb(30 30 30 / 0.4) 35%, rgb(30 30 30 / 0) 60%);
+  }
+
+  .dragHint {
+    right: max(var(--gutter), (100% - var(--container)) / 2);
+  }
 }
 
 /* ─── Shared section furniture ─────────────────────────────────────────── */
@@ -300,6 +369,13 @@
   scroll-margin-top: var(--nav-height);
 }
 
+/* Phones and tablets: the hero already ends with breathing room below the Wada. */
+@media (max-width: 1047px) {
+  .waitlist {
+    padding-top: 56px;
+  }
+}
+
 .waitlistInner {
   width: 100%;
   max-width: var(--container);
@@ -332,7 +408,7 @@
 
 .editionGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
   gap: 16px;
 }
 
@@ -340,7 +416,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  min-height: 340px;
+  min-height: 320px;
   padding: 22px;
   color: var(--black);
   border: 3px solid var(--off-white);
@@ -350,6 +426,13 @@
 .editionCard[data-current] {
   color: var(--off-white);
   background: var(--black);
+}
+
+/* Phones: cards are full width, so a fixed height would only add empty space. */
+@media (max-width: 600px) {
+  .editionCard {
+    min-height: 0;
+  }
 }
 
 .editionTop {
@@ -373,33 +456,70 @@
   border-radius: 999px;
 }
 
-.editionBarWrap {
+.editionChart {
   flex: 1;
   display: flex;
   align-items: flex-end;
-  min-height: 120px;
 }
 
-.editionBar {
-  width: 100%;
-  min-height: 24px;
-  background: rgba(30, 30, 30, 0.14);
-  border: 2px solid var(--black);
-  border-radius: 14px;
+/* One dot per 50 people: faint rings, with the attended ones filled in. */
+.editionDots {
+  display: grid;
+  grid-template-columns: repeat(5, 16px);
+  gap: 9px;
+}
+
+.personDot {
+  position: relative;
+  width: 16px;
+  height: 16px;
+}
+
+.personDot::before,
+.personDot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.personDot::before {
+  border: 2px solid currentColor;
+  opacity: 0.25;
+}
+
+.personDot[data-filled]::after {
+  background: currentColor;
+  transform: scale(0);
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: calc(0.3s + var(--i) * 45ms);
+}
+
+/* Fills in, one dot after another, once the card has scrolled into view. */
+.editionCard[data-revealed] .personDot[data-filled]::after {
+  transform: none;
+}
+
+/* Phones: full-width cards, so two long rows instead of a block. */
+@media (max-width: 600px) {
+  .editionDots {
+    grid-template-columns: repeat(10, 16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .personDot[data-filled]::after {
+    transform: none;
+    transition: none;
+  }
 }
 
 .editionBarCurrent {
   width: 100%;
   height: 16px;
-  background: linear-gradient(90deg, #4285f4 0 25%, #34a853 25% 50%, #f9ab00 50% 75%, #ea4335 75%);
+  background: linear-gradient(90deg, var(--blue) 0 25%, var(--green) 25% 50%, var(--yellow) 50% 75%, var(--red) 75%);
   border: 2px solid var(--off-white);
   border-radius: 999px;
-}
-
-.editionFoot {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
 }
 
 .editionCount {
@@ -409,7 +529,9 @@
   letter-spacing: -0.03em;
 }
 
+/* Caption under the year; any difference in length is absorbed by the space below it. */
 .editionNote {
+  margin: -8px 0 0;
   font-size: 15px;
   line-height: 1.4;
   text-wrap: pretty;
@@ -442,7 +564,8 @@
   transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-.trackCard:hover {
+/* Only lifts when it's a link to the agenda. */
+a.trackCard:hover {
   color: var(--black);
   transform: translateY(-6px);
 }
@@ -492,7 +615,7 @@
   gap: 32px 56px;
   align-items: end;
   padding: clamp(32px, 5vw, 64px);
-  color: var(--black);
+  color: var(--ink);
   background: var(--red);
   border: 3px solid var(--off-white);
   border-radius: 40px;
@@ -520,78 +643,146 @@
   text-wrap: pretty;
 }
 
-.darkPill {
+/* A status, not an action: plain text with a marker, so it doesn't read as a button. */
+.statusLabel {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 22px;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 600;
   line-height: 1;
-  color: var(--off-white);
-  background: var(--black);
-  border: 3px solid var(--black);
-  border-radius: 999px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.dot {
-  width: 8px;
-  height: 8px;
-  background: var(--yellow);
+.statusDot {
+  width: 10px;
+  height: 10px;
+  background: var(--ink);
   border-radius: 99px;
+  box-shadow: 0 0 0 4px rgb(17 17 17 / 0.18);
 }
 
 /* ─── Gallery ──────────────────────────────────────────────────────────── */
-.galleryGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
-  grid-auto-rows: 220px;
-  grid-auto-flow: dense;
-  gap: 16px;
+/* Gallery: the heading sits in the container, the marquee runs edge to edge. */
+.gallerySection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 0 0 clamp(88px, 11vw, 152px);
+  overflow: hidden;
 }
 
-.galleryCell {
+.gallerySection > .sectionInner {
+  width: calc(100% - 2 * var(--gutter));
+}
+
+.marquee {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marqueeRow {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  animation: marquee 86s linear infinite;
+}
+
+.marqueeRow[data-reverse] {
+  animation-direction: reverse;
+}
+
+.marquee:hover .marqueeRow {
+  animation-play-state: paused;
+}
+
+.marqueeItem {
   position: relative;
-  min-width: 0;
+  flex: none;
+  height: clamp(160px, 20vw, 260px);
+  margin: 0;
   overflow: hidden;
   border: 2px solid var(--off-white);
-  border-radius: 24px;
+  border-radius: 20px;
+}
+
+.marqueeItem img {
+  object-fit: cover;
+}
+
+/* Moves by exactly one of the three copies (its width plus one gap), then loops. */
+@keyframes marquee {
+  to {
+    transform: translateX(calc(-100% / 3 - 16px / 3));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+  }
+
+  .marqueeRow {
+    animation: none;
+  }
 }
 
 /* ─── Sponsors ─────────────────────────────────────────────────────────── */
+/* Tier label on the rule, logos underneath it. */
 .tierRow {
-  display: grid;
-  grid-template-columns: minmax(0, 160px) minmax(0, 1fr);
-  gap: 20px;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   padding-top: 20px;
   border-top: 2px solid var(--hairline);
 }
 
 .tierName {
-  padding-top: 6px;
   font-size: 14px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
-.tierGrid {
-  display: grid;
-  gap: 12px;
-}
-
-.tierCell {
+.sponsorCard {
+  position: relative;
   display: grid;
   place-items: center;
+  max-width: 420px;
+  height: 180px;
+  padding: 28px 36px;
   background: var(--surface);
   border: 2px solid var(--off-white);
   border-radius: 20px;
+  transition: background 0.25s ease;
 }
 
-.tierPlaceholder {
-  font-size: 13px;
-  color: var(--faint);
+.sponsorCard:hover {
+  color: var(--off-white);
+  background: var(--surface-raised);
+}
+
+/* The logo's grey wordmark is made for light backgrounds, so it sits on an off-white card. */
+.sponsorCard[data-logo],
+.sponsorCard[data-logo]:hover {
+  background: var(--off-white);
+}
+
+.sponsorLogo {
+  padding: 32px 40px;
+  object-fit: contain;
+}
+
+.sponsorName {
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-align: center;
 }
 
 /* ─── FAQ ──────────────────────────────────────────────────────────────── */
@@ -604,13 +795,26 @@
   align-items: start;
 }
 
-@media (max-width: 760px) {
-  .tierRow {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
+/* Phones: keep Pune, 2026 and the colour bar on one line. */
+@media (max-width: 480px) {
+  .badges {
+    gap: 10px;
   }
 
-  .galleryGrid {
-    grid-auto-rows: 180px;
+  .badgeSolid,
+  .badgeGhost {
+    padding: 8px 18px;
+    font-size: 20px;
+  }
+
+  .colorBar {
+    max-width: 160px;
+    height: 12px;
+    gap: 5px;
+  }
+
+  .colorBar > span {
+    border-width: 2px;
   }
 }
+

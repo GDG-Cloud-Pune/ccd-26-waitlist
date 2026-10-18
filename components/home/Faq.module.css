@@ -37,8 +37,6 @@
   place-items: center;
   width: 36px;
   height: 36px;
-  font-size: 22px;
-  line-height: 1;
   border: 2px solid var(--off-white);
   border-radius: 999px;
   transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.3s ease, color 0.3s ease;
