@@ -1,0 +1,132 @@
+.footer {
+  display: flex;
+  justify-content: center;
+  padding: 64px var(--gutter) 40px;
+  background: var(--black);
+  border-top: 2px solid var(--off-white);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--container);
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.wordmark {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+
+.bar {
+  display: flex;
+  gap: 8px;
+  width: 220px;
+  height: 12px;
+}
+
+.bar > span {
+  flex: 1;
+  border: 2px solid var(--off-white);
+  border-radius: 999px;
+}
+
+.when {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 56px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-size: 16px;
+}
+
+/* Taller hit area (44px) for thumbs; the text keeps the same spacing as before. */
+.column a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin: -4px 0;
+}
+
+.columnTitle {
+  margin-bottom: 8px;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 28px;
+  border-top: 1px solid var(--hairline);
+}
+
+.logo {
+  display: block;
+  width: auto;
+  height: 36px;
+}
+
+.socials {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--off-white);
+  border-radius: 999px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.social svg {
+  width: 18px;
+  height: 18px;
+}
+
+.social:hover {
+  color: var(--black);
+  background: var(--off-white);
+}
+
+.copyright {
+  font-size: 14px;
+  color: var(--faint);
+}

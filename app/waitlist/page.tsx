@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { CloudMark } from "@/components/brand/CloudMark";
 import { ColorBar } from "@/components/brand/ColorBar";
@@ -7,7 +8,15 @@ import { SocialLinks } from "@/components/SocialLinks";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import styles from "./page.module.css";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "Waitlist",
+  description: "Join the Cloud Community Day Pune 2026 waitlist and hear first when registrations open.",
+  // The same form now lives on the home page; keep this older link working but point search engines there.
+  alternates: { canonical: "/" },
+  robots: { index: false, follow: true },
+};
+
+export default function WaitlistPage() {
   return (
     <main className={styles.page}>
       <SiteHeader className={styles.header}>

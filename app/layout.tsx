@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit, Space_Mono } from "next/font/google";
+import { EVENT } from "@/lib/event";
+import { SITE_URL, sharePreview } from "@/lib/site";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -16,15 +18,30 @@ const spaceMono = Space_Mono({
   display: "swap",
 });
 
-const title = "Cloud Community Day Pune 2026 · Coming soon";
-const description =
-  "Cloud Community Day is coming to Pune in 2026. Join the GDG Cloud Pune waitlist to hear first when registrations open.";
+const title = `${EVENT.name} ${EVENT.year} · ${EVENT.city}`;
+const description = `${EVENT.name} is ${EVENT.organiser}'s annual conference for developers building on Google Cloud and AI. ${EVENT.dateLong} at ${EVENT.venue}.`;
 
 export const metadata: Metadata = {
-  title,
+  // Absolute base for share images and canonical links; SITE_URL overrides it for preview deploys.
+  metadataBase: new URL(SITE_URL),
+  title: { default: title, template: `%s · ${EVENT.name} ${EVENT.year}` },
   description,
-  openGraph: { title, description, type: "website", siteName: "GDG Cloud Pune" },
-  twitter: { card: "summary", title, description },
+  applicationName: `${EVENT.name} ${EVENT.year}`,
+  authors: [{ name: EVENT.organiser, url: EVENT.communityUrl }],
+  publisher: EVENT.organiser,
+  category: "technology",
+  keywords: [
+    `${EVENT.name} ${EVENT.city}`,
+    `${EVENT.name} ${EVENT.year}`,
+    EVENT.organiser,
+    "Google Cloud",
+    "GDG Pune",
+    "developer conference Pune",
+    "AI conference Pune",
+  ],
+  // Stops iOS turning dates and numbers into tap-to-call links.
+  formatDetection: { telephone: false, address: false, email: false },
+  ...sharePreview(title, description, "/"),
 };
 
 export const viewport: Viewport = {
@@ -33,7 +50,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${spaceMono.variable}`}>
+    <html lang="en-IN" className={`${outfit.variable} ${spaceMono.variable}`}>
       <body>{children}</body>
     </html>
   );

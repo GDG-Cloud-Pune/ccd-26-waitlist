@@ -10,7 +10,7 @@ const envSchema = z.object({
   ZEPTOMAIL_FROM_ADDRESS: z.email(),
   ZEPTOMAIL_FROM_NAME: z.string().min(1),
   // Monitored inbox for replies; the sending address itself isn't read.
-  ZEPTOMAIL_REPLY_TO: z.email().default("contact@gdgcloudpune.in"),
+  ZEPTOMAIL_REPLY_TO: z.email().default("gdgcloudpune@gmail.com"),
   RATE_LIMIT_SALT: z.string().min(16, "RATE_LIMIT_SALT must be at least 16 characters"),
 });
 

@@ -1,0 +1,185 @@
+.wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  padding: 14px 20px;
+  pointer-events: none;
+}
+
+.bar {
+  pointer-events: auto;
+  width: 100%;
+  max-width: var(--container);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 8px 8px 8px 12px;
+  border: 2px solid var(--off-white);
+  border-radius: 999px;
+  background: rgba(30, 30, 30, 0.82);
+  /* No hand-written -webkit- prefix: writing it here makes the CSS optimiser keep
+     only the prefixed form, which Chrome and Firefox ignore. It adds prefixes itself. */
+  backdrop-filter: blur(14px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding-left: 6px;
+}
+
+.logo {
+  display: block;
+  width: auto;
+  height: 22px;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.link {
+  padding: 10px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 999px;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.link:hover {
+  background: #333333;
+  color: var(--off-white);
+}
+
+.link[data-active] {
+  background: var(--off-white);
+  color: var(--black);
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--black);
+  background: var(--yellow);
+  border: 2px solid var(--off-white);
+  border-radius: 999px;
+}
+
+.cta:hover,
+.sheetCta:hover {
+  color: var(--black);
+  filter: brightness(1.06);
+}
+
+.ctaDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  background: var(--black);
+}
+
+.burger {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  color: var(--black);
+  background: var(--off-white);
+  border: 2px solid var(--off-white);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.burgerBar {
+  width: 16px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--black);
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.burgerBar:first-of-type[data-open] {
+  transform: translateY(3.5px) rotate(45deg);
+}
+
+.burgerBar:last-of-type[data-open] {
+  transform: translateY(-3.5px) rotate(-45deg);
+}
+
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: 96px 28px 40px;
+  background: var(--black);
+  opacity: 0;
+  transform: translateY(-12px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.sheet[data-open] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.sheetLink {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.sheetCta {
+  align-self: flex-start;
+  margin-top: 16px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--black);
+  background: var(--yellow);
+  border: 2px solid var(--off-white);
+  border-radius: 999px;
+}
+
+@media (max-width: 899px) {
+  .logo {
+    height: 19px;
+  }
+
+  .links,
+  .cta {
+    display: none;
+  }
+
+  .burger {
+    display: flex;
+  }
+
+  .sheet {
+    display: flex;
+  }
+}
