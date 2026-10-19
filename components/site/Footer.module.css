@@ -67,7 +67,8 @@
 }
 
 /* Taller hit area (44px) for thumbs; the text keeps the same spacing as before. */
-.column a {
+.column a,
+.textButton {
   display: flex;
   align-items: center;
   min-height: 44px;
@@ -129,4 +130,19 @@
 .copyright {
   font-size: 14px;
   color: var(--faint);
+}
+
+/* "Cookie settings" is a button (it opens the notice) styled like the links beside it. */
+.textButton {
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.textButton:hover {
+  color: var(--yellow);
 }

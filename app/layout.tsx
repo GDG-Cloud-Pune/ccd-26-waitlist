@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit, Space_Mono } from "next/font/google";
 import { Analytics } from "@/components/Analytics";
+import { ANALYTICS_ENABLED, GA_MEASUREMENT_ID } from "@/lib/analytics";
 import { EVENT } from "@/lib/event";
 import { SITE_URL, sharePreview } from "@/lib/site";
 import "./globals.css";
@@ -54,7 +55,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en-IN" className={`${outfit.variable} ${spaceMono.variable}`}>
       <body>
         {children}
-        <Analytics />
+        <Analytics enabled={ANALYTICS_ENABLED} measurementId={GA_MEASUREMENT_ID} />
       </body>
     </html>
   );
