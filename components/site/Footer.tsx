@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SocialIcon } from "@/components/brand/SocialIcon";
-import { CookieSettingsLink } from "@/components/site/CookieSettingsLink";
-import { ANALYTICS_ENABLED } from "@/lib/analytics";
 import { EVENT, NAV_LINKS } from "@/lib/event";
 import { SOCIAL_LINKS } from "@/lib/socials";
 import styles from "./Footer.module.css";
@@ -47,7 +45,6 @@ export function Footer() {
                 Code of conduct
               </a>
               <a href={`mailto:${EVENT.contactEmail}`}>Contact</a>
-              {ANALYTICS_ENABLED && <CookieSettingsLink className={styles.textButton} />}
             </div>
           </div>
         </div>
