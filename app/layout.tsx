@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit, Space_Mono } from "next/font/google";
+import { Analytics } from "@/components/Analytics";
 import { EVENT } from "@/lib/event";
 import { SITE_URL, sharePreview } from "@/lib/site";
 import "./globals.css";
@@ -51,7 +52,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-IN" className={`${outfit.variable} ${spaceMono.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

@@ -11,6 +11,7 @@ import {
 } from "react";
 import { CloudMark } from "@/components/brand/CloudMark";
 import { SuccessModal } from "@/components/SuccessModal";
+import { trackEvent } from "@/lib/analytics";
 import {
   normalizeWhatsappDigits,
   waitlistFieldSchemas,
@@ -108,6 +109,8 @@ export function WaitlistForm({ intro }: WaitlistFormProps) {
 
       if (response.ok) {
         setSuccess({ firstName: data.firstName ?? values.firstName.trim(), emailSent: Boolean(data.emailSent) });
+        // GA4's recommended sign-up event; mark it as a key event in Analytics to count conversions.
+        trackEvent("sign_up", { method: "waitlist" });
         setModalOpen(true);
         return;
       }
