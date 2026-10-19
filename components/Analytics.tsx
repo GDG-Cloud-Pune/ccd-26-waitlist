@@ -59,9 +59,7 @@ gtag('config', '${measurementId}');`}
 
       {open && (
         <section className={styles.notice} aria-label="Cookie consent">
-          <p className={styles.text}>
-            Can we use Google Analytics cookies to see how people find the event? Nothing is tracked unless you say yes.
-          </p>
+          <p className={styles.text}>We use cookies to improve your experience.</p>
           <div className={styles.actions}>
             <button type="button" className={styles.accept} onClick={() => choose("granted")}>
               Accept
