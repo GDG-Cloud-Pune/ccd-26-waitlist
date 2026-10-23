@@ -22,7 +22,7 @@ const SCALE = 2;
 const DATE = "Sunday, 6 December 2026";
 const VENUE = "The Orchid, Pune";
 
-const fontUrl = pathToFileURL(join(root, "lib/emails/assets/Outfit-latin.woff2")).href;
+const fontUrl = pathToFileURL(join(root, "scripts/assets/Outfit-latin.woff2")).href;
 const logoUrl = pathToFileURL(join(root, "public/gdg-cloud-pune-logo.png")).href;
 const wadaUrl = pathToFileURL(join(root, "public/assets/wada.svg")).href;
 

@@ -8,12 +8,18 @@ import styles from "./page.module.css";
 
 const description = `The running order for ${EVENT.name} ${EVENT.year}: main-stage talks and hands-on workshops on ${EVENT.dateLong}.`;
 
-export const metadata: Metadata = {
-  title: "Agenda",
-  description,
-  alternates: { canonical: "/agenda" },
-  ...sharePreview(`Agenda · ${EVENT.name} ${EVENT.year}`, description, "/agenda"),
-};
+/** While the page is switched off it answers 404, so the tab shouldn't be titled as if it were live. */
+const notFoundMetadata: Metadata = { title: "Page not found", robots: { index: false, follow: true } };
+
+export function generateMetadata(): Metadata {
+  if (!EVENT.agendaPublished) return notFoundMetadata;
+  return {
+    title: "Agenda",
+    description,
+    alternates: { canonical: "/agenda" },
+    ...sharePreview(`Agenda · ${EVENT.name} ${EVENT.year}`, description, "/agenda"),
+  };
+}
 
 export default function AgendaPage() {
   // Hidden until the running order is final: flip EVENT.agendaPublished in lib/event.ts.

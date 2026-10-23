@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
+import { registrationLink } from "./lib/event";
 
 const isDev = process.env.NODE_ENV !== "production";
 
-// Fonts are self-hosted by next/font, and the form only talks to its own API route.
+// Fonts are self-hosted by next/font and the site makes no requests of its own.
 // Third parties: YouTube's privacy-enhanced player (framed after a visitor presses play) and
 // Google Analytics 4, which loads from googletagmanager.com and reports to google-analytics.com.
 // Next.js injects inline hydration scripts, so script-src needs 'unsafe-inline' without nonces.
@@ -23,6 +24,10 @@ const contentSecurityPolicy = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // The waitlist link that was shared before registrations opened now lands on the ticket page.
+  async redirects() {
+    return [{ source: "/waitlist", destination: registrationLink("waitlist-link"), permanent: false }];
+  },
   async headers() {
     return [
       {

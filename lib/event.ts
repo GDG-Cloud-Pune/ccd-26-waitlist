@@ -32,11 +32,25 @@ export const EVENT = {
   agendaPublished: true,
   /** Flip to true once the team line-up is final: shows the Team page and its nav link. */
   teamPublished: false,
-  /** Flip to true once registrations open, then point registrationUrl somewhere. */
-  registrationsOpen: false,
-  registrationUrl: "",
-  registrationLabel: "Registrations opening soon",
+  /** Tickets are sold on KonfHub. Flip registrationsOpen to false to turn every Register button into a plain status. */
+  registrationsOpen: true,
+  registrationUrl: "https://konfhub.com/ccdpune",
+  registrationLabel: "Register now",
+  registrationClosedLabel: "Registrations closed",
 } as const;
+
+/** Where on the site a Register button sits; sent to KonfHub as utm_content and to Analytics. */
+export type RegisterPlacement = "nav" | "menu" | "hero" | "register" | "not-found" | "waitlist-link";
+
+/** The KonfHub link tagged so KonfHub's analytics attribute the registration to this website. */
+export function registrationLink(placement: RegisterPlacement) {
+  const url = new URL(EVENT.registrationUrl);
+  url.searchParams.set("utm_source", "website");
+  url.searchParams.set("utm_medium", "referral");
+  url.searchParams.set("utm_campaign", `ccd-${EVENT.city.toLowerCase()}-${EVENT.year}`);
+  url.searchParams.set("utm_content", placement);
+  return url.toString();
+}
 
 const ALL_NAV_LINKS = [
   { key: "home", label: "Home", href: "/" },

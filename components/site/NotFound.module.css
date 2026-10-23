@@ -1,0 +1,96 @@
+/* Same header furniture as the agenda and speakers pages, so a wrong turn still looks like the site. */
+.page {
+  display: flex;
+  justify-content: center;
+  min-height: 70vh;
+  padding: 168px var(--gutter) clamp(88px, 11vw, 152px);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--container);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pill,
+.pillSolid {
+  padding: 7px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  border: 2px solid var(--off-white);
+  border-radius: 999px;
+}
+
+.pillSolid {
+  font-weight: 600;
+  color: var(--black);
+  background: var(--off-white);
+}
+
+.title {
+  margin: 0;
+  max-width: 1000px;
+  font-size: clamp(56px, 8.4vw, 120px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.yellow {
+  color: var(--yellow);
+}
+
+.lede {
+  margin: 0;
+  max-width: 520px;
+  font-size: clamp(18px, 1.5vw, 21px);
+  line-height: 1.5;
+  color: var(--body);
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.primary,
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1;
+  border: 3px solid var(--off-white);
+  border-radius: 999px;
+  transition: background 0.25s ease, color 0.25s ease, filter 0.25s ease;
+}
+
+.primary {
+  color: var(--ink);
+  background: var(--yellow);
+}
+
+.primary:hover {
+  color: var(--ink);
+  filter: brightness(1.06);
+}
+
+.ghost:hover {
+  color: var(--black);
+  background: var(--off-white);
+}
