@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { registrationLink } from "./lib/event";
+import { registrationLink, SHORT_LINKS, shortLinkDestination } from "./lib/event";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -24,9 +24,13 @@ const contentSecurityPolicy = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  // The waitlist link that was shared before registrations opened now lands on the ticket page.
   async redirects() {
-    return [{ source: "/waitlist", destination: registrationLink("waitlist-link"), permanent: false }];
+    return [
+      // The waitlist link that was shared before registrations opened now lands on the ticket page.
+      { source: "/waitlist", destination: registrationLink("waitlist-link"), permanent: false },
+      // Short links for each platform land on the home page with that platform's UTM tags.
+      ...SHORT_LINKS.map((link) => ({ source: link.path, destination: shortLinkDestination(link), permanent: false })),
+    ];
   },
   async headers() {
     return [
