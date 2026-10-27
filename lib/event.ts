@@ -70,7 +70,7 @@ export function registrationLink(placement: RegisterPlacement, arrivedWith = "")
  */
 export const SHORT_LINKS = [
   { path: "/ig", source: "instagram", medium: "social" },
-  { path: "/in", source: "linkedin", medium: "social" },
+  { path: "/li", source: "linkedin", medium: "social" },
   { path: "/x", source: "x", medium: "social" },
   { path: "/yt", source: "youtube", medium: "social" },
   { path: "/wa", source: "whatsapp", medium: "messaging" },
