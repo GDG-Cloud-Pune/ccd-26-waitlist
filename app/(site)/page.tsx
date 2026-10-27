@@ -8,11 +8,11 @@ import { Countdown } from "@/components/home/Countdown";
 import { Faq } from "@/components/home/Faq";
 import { Hero3D } from "@/components/home/Hero3D";
 import { Loader } from "@/components/home/Loader";
+import { RegisterLink } from "@/components/site/RegisterLink";
 import { SpeakerCard } from "@/components/site/SpeakerCard";
-import { WaitlistForm } from "@/components/WaitlistForm";
 import { EDITIONS, FAQS, GALLERY, SPONSORS } from "@/data/home";
 import { FEATURED_SPEAKERS } from "@/data/speakers";
-import { EVENT } from "@/lib/event";
+import { EVENT, registrationLink } from "@/lib/event";
 import { SOCIAL_LINKS } from "@/lib/socials";
 import { SITE_URL, absoluteUrl } from "@/lib/site";
 import styles from "./page.module.css";
@@ -34,6 +34,11 @@ const EVENT_JSON_LD = {
   url: SITE_URL,
   image: [absoluteUrl("/og-image.png"), absoluteUrl(EVENT.afterFilm.poster)],
   inLanguage: "en-IN",
+  offers: {
+    "@type": "Offer",
+    url: registrationLink("hero"),
+    availability: EVENT.registrationsOpen ? "https://schema.org/InStock" : "https://schema.org/SoldOut",
+  },
   location: {
     "@type": "Place",
     name: EVENT.venueName,
@@ -122,9 +127,7 @@ export default function HomePage() {
 
             <Countdown />
 
-            <a href="#waitlist" className={styles.heroButton}>
-              Join the waitlist <Icon name="arrow-down" />
-            </a>
+            <RegisterLink placement="hero" className={styles.heroButton} />
           </div>
 
           {/* The Wada is framed in this column; the 3D scene itself runs under the whole hero. */}
@@ -139,19 +142,34 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="waitlist" className={styles.waitlist}>
-        <div className={styles.waitlistInner}>
-          <div className={styles.waitlistCopy} data-reveal="0">
-            <span className={styles.eyebrow}>Waitlist</span>
+      <section id="register" className={styles.register}>
+        <div className={styles.registerInner}>
+          <div className={styles.registerCopy} data-reveal="0">
+            <span className={styles.eyebrow}>Register</span>
             <h2 className={styles.h2}>
-              Be first in line when <span className={styles.yellow}>registrations open.</span>
+              Registrations are <span className={styles.yellow}>open.</span>
             </h2>
             <p className={styles.body}>
-              We&rsquo;ll email you the moment tickets go live. No other mail, and we never share your details.
+              Tickets are on KonfHub. Workshop seats are limited, so register early to get your pick.
             </p>
           </div>
-          <div className={styles.waitlistCard} data-reveal="120">
-            <WaitlistForm />
+          <div className={styles.registerCard} data-reveal="120">
+            <dl className={styles.registerFacts}>
+              <div className={styles.registerFact}>
+                <dt className={styles.factLabel}>Date</dt>
+                <dd className={styles.factValue}>{EVENT.dateLong}</dd>
+              </div>
+              <div className={styles.registerFact}>
+                <dt className={styles.factLabel}>Venue</dt>
+                <dd className={styles.factValue}>{EVENT.venue}</dd>
+              </div>
+              <div className={styles.registerFact}>
+                <dt className={styles.factLabel}>Format</dt>
+                <dd className={styles.factValue}>Main-stage talks and hands-on workshops</dd>
+              </div>
+            </dl>
+            <RegisterLink placement="register" className={styles.registerButton} />
+            <p className={styles.registerNote}>Registration is handled on KonfHub, which opens in a new tab.</p>
           </div>
         </div>
       </section>

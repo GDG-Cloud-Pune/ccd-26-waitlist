@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { RegisterLink } from "@/components/site/RegisterLink";
 import { EVENT, NAV_LINKS } from "@/lib/event";
 import styles from "./Nav.module.css";
 
@@ -48,11 +49,10 @@ export function Nav() {
             ))}
           </div>
 
-          {/* Until registrations open, the pill takes people to the waitlist form. */}
-          <Link href="/#waitlist" className={styles.cta}>
+          <RegisterLink placement="nav" className={styles.cta}>
             <span className={styles.ctaDot} aria-hidden="true" />
             {EVENT.registrationLabel}
-          </Link>
+          </RegisterLink>
 
           <button
             type="button"
@@ -74,9 +74,12 @@ export function Nav() {
             {label}
           </Link>
         ))}
-        <Link href="/#waitlist" className={styles.sheetCta} tabIndex={open ? undefined : -1}>
-          {EVENT.registrationLabel}
-        </Link>
+        {/* Opens in a new tab, so the sheet stays as it was when the visitor comes back. */}
+        {open && (
+          <RegisterLink placement="menu" className={styles.sheetCta}>
+            {EVENT.registrationLabel}
+          </RegisterLink>
+        )}
       </div>
     </>
   );

@@ -29,6 +29,8 @@
   --container: 1240px;
   --gutter: 24px;
   --nav-height: 84px;
+  /* Where the floating nav bar ends (14px offset + 56px bar): sticky things below it start here. */
+  --nav-bottom: 70px;
 
   --font-sans: var(--font-outfit), "Google Sans", system-ui, sans-serif;
   --font-mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;

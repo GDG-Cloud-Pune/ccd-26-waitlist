@@ -8,12 +8,18 @@ import styles from "./page.module.css";
 
 const description = `Speakers at ${EVENT.name} ${EVENT.year}: practitioners from across the Google Cloud and AI community.`;
 
-export const metadata: Metadata = {
-  title: "Speakers",
-  description,
-  alternates: { canonical: "/speakers" },
-  ...sharePreview(`Speakers · ${EVENT.name} ${EVENT.year}`, description, "/speakers"),
-};
+/** While the page is switched off it answers 404, so the tab shouldn't be titled as if it were live. */
+const notFoundMetadata: Metadata = { title: "Page not found", robots: { index: false, follow: true } };
+
+export function generateMetadata(): Metadata {
+  if (!EVENT.speakersAnnounced) return notFoundMetadata;
+  return {
+    title: "Speakers",
+    description,
+    alternates: { canonical: "/speakers" },
+    ...sharePreview(`Speakers · ${EVENT.name} ${EVENT.year}`, description, "/speakers"),
+  };
+}
 
 export default function SpeakersPage() {
   // Hidden until the line-up is final: flip EVENT.speakersAnnounced in lib/event.ts.

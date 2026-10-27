@@ -32,7 +32,7 @@ export function Countdown() {
   const values = parts(now ?? TARGET);
 
   return (
-    <div className={styles.row} aria-label={`Countdown to ${EVENT.dateLong}`}>
+    <div className={styles.row} role="group" aria-label={`Countdown to ${EVENT.dateLong}`}>
       {values.map(({ value, label }) => (
         <div key={label} className={styles.cell}>
           <span className={styles.value}>{now === null ? "––" : String(value).padStart(2, "0")}</span>

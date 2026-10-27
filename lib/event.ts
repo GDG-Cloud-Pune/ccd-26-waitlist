@@ -32,11 +32,55 @@ export const EVENT = {
   agendaPublished: true,
   /** Flip to true once the team line-up is final: shows the Team page and its nav link. */
   teamPublished: false,
-  /** Flip to true once registrations open, then point registrationUrl somewhere. */
-  registrationsOpen: false,
-  registrationUrl: "",
-  registrationLabel: "Registrations opening soon",
+  /** Tickets are sold on KonfHub. Flip registrationsOpen to false to turn every Register button into a plain status. */
+  registrationsOpen: true,
+  registrationUrl: "https://konfhub.com/ccdpune",
+  registrationLabel: "Register now",
+  registrationClosedLabel: "Registrations closed",
 } as const;
+
+/** Where on the site a Register button sits; sent to KonfHub as utm_content and to Analytics. */
+export type RegisterPlacement = "nav" | "menu" | "hero" | "register" | "not-found" | "waitlist-link";
+
+/** The default utm_campaign for links to the event. */
+export const CAMPAIGN = `ccd-${EVENT.city.toLowerCase()}-${EVENT.year}`;
+
+/** The UTM tags KonfHub keeps through checkout and reports on (it ignores utm_term and utm_content). */
+export const CAMPAIGN_TAGS = ["utm_source", "utm_medium", "utm_campaign"] as const;
+
+/**
+ * The KonfHub link tagged so KonfHub's analytics attribute the registration. `arrivedWith` is the
+ * query string of UTM tags the visitor reached the site with (e.g. from an Instagram link); those
+ * tags are passed on, and visitors who came without any are attributed to the website.
+ */
+export function registrationLink(placement: RegisterPlacement, arrivedWith = "") {
+  const incoming = new URLSearchParams(arrivedWith);
+  const fromCampaign = incoming.has("utm_source");
+  const url = new URL(EVENT.registrationUrl);
+  url.searchParams.set("utm_source", fromCampaign ? incoming.get("utm_source")! : "website");
+  url.searchParams.set("utm_medium", incoming.get("utm_medium") ?? (fromCampaign ? "social" : "referral"));
+  url.searchParams.set("utm_campaign", incoming.get("utm_campaign") ?? CAMPAIGN);
+  url.searchParams.set("utm_content", placement);
+  return url.toString();
+}
+
+/**
+ * Short links for bios, posts and posters: ccd.gdgcloudpune.in/ig lands on the home page tagged as
+ * Instagram, and the Register buttons pass that on to KonfHub. Paths are redirected in next.config.ts.
+ */
+export const SHORT_LINKS = [
+  { path: "/ig", source: "instagram", medium: "social" },
+  { path: "/in", source: "linkedin", medium: "social" },
+  { path: "/x", source: "x", medium: "social" },
+  { path: "/yt", source: "youtube", medium: "social" },
+  { path: "/wa", source: "whatsapp", medium: "messaging" },
+] as const;
+
+/** Where a short link lands: the home page with its UTM tags. */
+export function shortLinkDestination({ source, medium }: (typeof SHORT_LINKS)[number]) {
+  const query = new URLSearchParams({ utm_source: source, utm_medium: medium, utm_campaign: CAMPAIGN });
+  return `/?${query}`;
+}
 
 const ALL_NAV_LINKS = [
   { key: "home", label: "Home", href: "/" },

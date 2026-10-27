@@ -62,7 +62,7 @@
 
 .headRow {
   position: sticky;
-  top: 92px;
+  top: var(--nav-bottom);
   z-index: 5;
   display: grid;
   column-gap: 14px;

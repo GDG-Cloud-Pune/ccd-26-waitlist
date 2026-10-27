@@ -64,7 +64,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "How do I register?",
-    a: "Registrations open soon. Join the waitlist above and we'll email you the moment they do.",
+    a: "Registrations are open on KonfHub. Any Register now button on this site takes you there.",
   },
   {
     q: "Who is it for?",

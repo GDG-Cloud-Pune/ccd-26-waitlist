@@ -9,12 +9,18 @@ import styles from "./page.module.css";
 
 const description = `The ${EVENT.organiser} members and volunteers who organise ${EVENT.name}.`;
 
-export const metadata: Metadata = {
-  title: "Team",
-  description,
-  alternates: { canonical: "/team" },
-  ...sharePreview(`Team · ${EVENT.name} ${EVENT.year}`, description, "/team"),
-};
+/** While the page is switched off it answers 404, so the tab shouldn't be titled as if it were live. */
+const notFoundMetadata: Metadata = { title: "Page not found", robots: { index: false, follow: true } };
+
+export function generateMetadata(): Metadata {
+  if (!EVENT.teamPublished) return notFoundMetadata;
+  return {
+    title: "Team",
+    description,
+    alternates: { canonical: "/team" },
+    ...sharePreview(`Team · ${EVENT.name} ${EVENT.year}`, description, "/team"),
+  };
+}
 
 const CHIP_COLORS = ["var(--blue)", "var(--green)", "var(--yellow)", "var(--red)"];
 
