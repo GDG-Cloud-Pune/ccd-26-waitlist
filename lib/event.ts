@@ -37,7 +37,15 @@ export const EVENT = {
   registrationUrl: "https://konfhub.com/ccdpune",
   registrationLabel: "Register now",
   registrationClosedLabel: "Registrations closed",
+  /** Talk and workshop proposals are collected on CFPKit. */
+  cfpUrl: "https://cfpkit.com/ccdpune26",
 } as const;
+
+/** The passes listed in the home page's register card; sold-out ones stay listed, struck through. */
+export const PASSES = [
+  { name: "Early bird", soldOut: true },
+  { name: "Regular", soldOut: false },
+] as const;
 
 /** Where on the site a Register button sits; sent to KonfHub as utm_content and to Analytics. */
 export type RegisterPlacement = "nav" | "menu" | "hero" | "register" | "not-found" | "waitlist-link";
