@@ -98,11 +98,10 @@
   background: var(--black);
   border: 3px solid var(--black);
   border-radius: 999px;
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
-.dot {
-  width: 8px;
-  height: 8px;
-  background: var(--yellow);
-  border-radius: 99px;
+.darkPill:hover {
+  color: var(--black);
+  background: var(--off-white);
 }

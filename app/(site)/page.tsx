@@ -12,7 +12,7 @@ import { RegisterLink } from "@/components/site/RegisterLink";
 import { SpeakerCard } from "@/components/site/SpeakerCard";
 import { EDITIONS, FAQS, GALLERY, SPONSORS } from "@/data/home";
 import { FEATURED_SPEAKERS } from "@/data/speakers";
-import { EVENT, registrationLink } from "@/lib/event";
+import { EVENT, PASSES, registrationLink } from "@/lib/event";
 import { SOCIAL_LINKS } from "@/lib/socials";
 import { SITE_URL, absoluteUrl } from "@/lib/site";
 import styles from "./page.module.css";
@@ -127,7 +127,13 @@ export default function HomePage() {
 
             <Countdown />
 
-            <RegisterLink placement="hero" className={styles.heroButton} />
+            <div className={styles.heroActions}>
+              <RegisterLink placement="hero" className={styles.heroButton} />
+              <a href={EVENT.cfpUrl} target="_blank" rel="noopener noreferrer" className={styles.heroSecondary}>
+                Submit a talk <Icon name="arrow-right" />
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </div>
           </div>
 
           {/* The Wada is framed in this column; the 3D scene itself runs under the whole hero. */}
@@ -150,7 +156,8 @@ export default function HomePage() {
               Registrations are <span className={styles.yellow}>open.</span>
             </h2>
             <p className={styles.body}>
-              Tickets are on KonfHub. Workshop seats are limited, so register early to get your pick.
+              Early bird passes are sold out, and regular passes are on KonfHub now. Workshop seats are limited, so
+              register early to get your pick.
             </p>
           </div>
           <div className={styles.registerCard} data-reveal="120">
@@ -168,7 +175,17 @@ export default function HomePage() {
                 <dd className={styles.factValue}>Main-stage talks and hands-on workshops</dd>
               </div>
             </dl>
-            <RegisterLink placement="register" className={styles.registerButton} />
+            <ul className={styles.passList} aria-label="Passes">
+              {PASSES.map((pass) => (
+                <li key={pass.name} className={styles.pass} data-sold-out={pass.soldOut || undefined}>
+                  <span className={styles.passName}>{pass.name}</span>
+                  <span className={styles.passStatus}>{pass.soldOut ? "Sold out" : "Available"}</span>
+                </li>
+              ))}
+            </ul>
+            <RegisterLink placement="register" className={styles.registerButton}>
+              Get regular passes here <Icon name="arrow-right" />
+            </RegisterLink>
             <p className={styles.registerNote}>Registration is handled on KonfHub, which opens in a new tab.</p>
           </div>
         </div>
@@ -308,12 +325,12 @@ export default function HomePage() {
           <div className={styles.cfsSide}>
             <p className={styles.cfsText}>
               We&rsquo;re looking for talks and workshops on Google Cloud, AI, data and DevOps, and first-time
-              speakers are welcome too. Submissions open soon.
+              speakers are welcome too. Submissions are open on CFPKit.
             </p>
-            <span className={styles.statusLabel}>
-              <span className={styles.statusDot} aria-hidden="true" />
-              Opening soon
-            </span>
+            <a href={EVENT.cfpUrl} target="_blank" rel="noopener noreferrer" className={styles.cfsButton}>
+              Submit a talk <Icon name="arrow-right" />
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
           </div>
         </div>
       </section>

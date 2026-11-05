@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Icon } from "@/components/brand/Icon";
 import { SpeakersGrid } from "@/components/speakers/SpeakersGrid";
 import { SPEAKERS } from "@/data/speakers";
 import { EVENT } from "@/lib/event";
@@ -48,10 +49,10 @@ export default function SpeakersPage() {
       <section className={styles.ctaSection}>
         <div data-reveal="0" className={styles.ctaCard}>
           <h2 className={styles.ctaTitle}>Want to be on this page?</h2>
-          <span className={styles.darkPill}>
-            <span className={styles.dot} aria-hidden="true" />
-            Call for speakers opening soon
-          </span>
+          <a href={EVENT.cfpUrl} target="_blank" rel="noopener noreferrer" className={styles.darkPill}>
+            Submit a talk <Icon name="arrow-right" />
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
         </div>
       </section>
     </>
