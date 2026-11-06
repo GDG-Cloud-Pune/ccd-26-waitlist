@@ -1,6 +1,6 @@
 # Cloud Community Day Pune 2026
 
-The event site for Cloud Community Day Pune 2026 by GDG Cloud Pune: home page with the 3D Shaniwar Wada hero, agenda, and (once switched on) speakers and team pages. Registrations are handled on [KonfHub](https://konfhub.com/ccdpune); every Register button links there with UTM tags so KonfHub attributes sign-ups to this site.
+The event site for Cloud Community Day Pune 2026 by GDG Cloud Pune: home page with the 3D Shaniwar Wada hero, agenda, and (once switched on) speakers and team pages. Registrations are handled on [KonfHub](https://konfhub.com/ccdpune); every Register button links straight to its checkout page (https://konfhub.com/checkout/ccdpune) with UTM tags so KonfHub attributes sign-ups to this site.
 
 - **Next.js (App Router, TypeScript)**, deployed on **Vercel**
 - **three.js** for the hero, loaded only when the hero is near the viewport
