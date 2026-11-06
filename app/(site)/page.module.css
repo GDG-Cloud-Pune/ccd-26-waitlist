@@ -520,6 +520,16 @@
   color: var(--faint);
 }
 
+.registerNote a {
+  color: var(--body);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.registerNote a:hover {
+  color: var(--off-white);
+}
+
 /* ─── About / editions ─────────────────────────────────────────────────── */
 .aboutTop {
   display: grid;

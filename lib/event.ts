@@ -18,7 +18,9 @@ export const EVENT = {
   region: "Maharashtra",
   contactEmail: "gdgcloudpune@gmail.com",
   communityUrl: "https://gdg.community.dev/gdg-cloud-pune/",
-  codeOfConductUrl: "https://developers.google.com/community-guidelines",
+  /** Google's policies that the site's own code of conduct (/code-of-conduct) builds on. */
+  googleCommunityGuidelinesUrl: "https://developers.google.com/community-guidelines",
+  googleAntiHarassmentPolicyUrl: "https://www.google.com/events/policy/anti-harassmentpolicy.html",
   /** Last year's after-film. The home page section stays hidden while youtubeId is empty. */
   afterFilm: {
     year: "2025",

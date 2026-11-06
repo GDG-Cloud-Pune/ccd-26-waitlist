@@ -41,9 +41,8 @@ export function Footer() {
               <a href={EVENT.communityUrl} target="_blank" rel="noopener noreferrer">
                 {EVENT.organiser}
               </a>
-              <a href={EVENT.codeOfConductUrl} target="_blank" rel="noopener noreferrer">
-                Code of conduct
-              </a>
+              <Link href="/code-of-conduct">Code of conduct</Link>
+              <Link href="/terms">Terms and conditions</Link>
               <a href={`mailto:${EVENT.contactEmail}`}>Contact</a>
             </div>
           </div>
