@@ -34,7 +34,7 @@ export const EVENT = {
   teamPublished: false,
   /** Tickets are sold on KonfHub. Flip registrationsOpen to false to turn every Register button into a plain status. */
   registrationsOpen: true,
-  registrationUrl: "https://konfhub.com/ccdpune",
+  registrationUrl: "https://konfhub.com/checkout/ccdpune",
   registrationLabel: "Register now",
   registrationClosedLabel: "Registrations closed",
   /** Talk and workshop proposals are collected on CFPKit. */
