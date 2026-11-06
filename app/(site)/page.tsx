@@ -186,7 +186,10 @@ export default function HomePage() {
             <RegisterLink placement="register" className={styles.registerButton}>
               Get regular passes here <Icon name="arrow-right" />
             </RegisterLink>
-            <p className={styles.registerNote}>Registration is handled on KonfHub, which opens in a new tab.</p>
+            <p className={styles.registerNote}>
+              Registration is handled on KonfHub, which opens in a new tab. Tickets are non-refundable and
+              non-transferable; see the <Link href="/terms">terms</Link>.
+            </p>
           </div>
         </div>
       </section>

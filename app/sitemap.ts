@@ -9,6 +9,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/agenda", live: EVENT.agendaPublished, priority: 0.8 },
     { path: "/speakers", live: EVENT.speakersAnnounced, priority: 0.8 },
     { path: "/team", live: EVENT.teamPublished, priority: 0.5 },
+    { path: "/code-of-conduct", live: true, priority: 0.3 },
+    { path: "/terms", live: true, priority: 0.3 },
   ];
 
   return pages

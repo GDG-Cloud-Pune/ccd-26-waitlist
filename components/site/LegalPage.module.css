@@ -1,0 +1,142 @@
+/* The header matches the agenda page's. */
+.header {
+  display: flex;
+  justify-content: center;
+  padding: 168px var(--gutter) 40px;
+}
+
+.headerInner {
+  width: 100%;
+  max-width: var(--container);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pill,
+.pillSolid {
+  padding: 7px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  border: 2px solid var(--off-white);
+  border-radius: 999px;
+}
+
+.pillSolid {
+  font-weight: 600;
+  color: var(--black);
+  background: var(--off-white);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(56px, 8.4vw, 120px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.yellow {
+  color: var(--yellow);
+}
+
+.lede {
+  margin: 0;
+  max-width: 520px;
+  font-size: clamp(18px, 1.5vw, 21px);
+  line-height: 1.5;
+  color: var(--body);
+  text-wrap: pretty;
+}
+
+.updated {
+  margin-top: -12px;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  padding: 24px var(--gutter) clamp(88px, 11vw, 152px);
+}
+
+.contentInner {
+  width: 100%;
+  max-width: var(--container);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sections are divided by hairlines, like the facts in the register card. */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 40px 0;
+  border-top: 1px solid var(--hairline);
+  scroll-margin-top: calc(var(--nav-height) + 24px);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+/* Body text as on the home page. */
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 760px;
+  font-size: clamp(18px, 1.5vw, 21px);
+  line-height: 1.55;
+  color: var(--body);
+  text-wrap: pretty;
+}
+
+.prose p,
+.prose ul {
+  margin: 0;
+}
+
+.prose ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 22px;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--off-white);
+}
+
+.prose a {
+  color: var(--off-white);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose a:hover {
+  color: var(--yellow);
+}
+
+.callout {
+  padding: 14px 18px;
+  color: var(--off-white);
+  border: 2px solid var(--yellow);
+  border-radius: 16px;
+}
