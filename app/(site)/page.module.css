@@ -943,6 +943,48 @@ a.trackCard:hover {
   text-align: center;
 }
 
+/* An open slot rather than a logo: a dashed outline, the same size as a sponsor card. */
+.partnerCall {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  max-width: 420px;
+  min-height: 180px;
+  padding: 28px 32px;
+  border: 2px dashed var(--off-white);
+  border-radius: 20px;
+  transition: background 0.25s ease;
+}
+
+.partnerCall:hover {
+  color: var(--off-white);
+  background: var(--surface);
+}
+
+.partnerCallTitle {
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.partnerCallText {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--body);
+}
+
+.partnerCallAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--yellow);
+}
+
 /* ─── FAQ ──────────────────────────────────────────────────────────────── */
 .faqGrid {
   width: 100%;

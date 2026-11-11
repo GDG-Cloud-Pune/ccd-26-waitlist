@@ -41,6 +41,8 @@ export const EVENT = {
   registrationClosedLabel: "Registrations closed",
   /** Talk and workshop proposals are collected on CFPKit. */
   cfpUrl: "https://cfpkit.com/ccdpune26",
+  /** Communities apply to be community partners through this Google Form. */
+  communityPartnerUrl: "https://forms.gle/ReE4yrFuo4YuSP6y5",
 } as const;
 
 /** The passes listed in the home page's register card; sold-out ones stay listed, struck through. */
