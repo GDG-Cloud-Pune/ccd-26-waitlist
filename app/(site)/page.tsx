@@ -417,6 +417,25 @@ export default function HomePage() {
               </a>
             </div>
           ))}
+          <div data-reveal="0" className={styles.tierRow}>
+            <span className={styles.tierName}>Community partners</span>
+            <a
+              href={EVENT.communityPartnerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.partnerCall}
+            >
+              <span className={styles.partnerCallTitle}>Run a tech community?</span>
+              <span className={styles.partnerCallText}>
+                Partner with us to bring your members along and get your community in front of Pune&rsquo;s cloud
+                developers.
+              </span>
+              <span className={styles.partnerCallAction}>
+                Become a community partner <Icon name="arrow-right" />
+              </span>
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </div>
         </div>
       </section>
 

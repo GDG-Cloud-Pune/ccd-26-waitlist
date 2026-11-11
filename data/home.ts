@@ -79,7 +79,7 @@ export const FAQS: { q: string; a: string }[] = [
     a: "For workshops, yes: charged and ready. Main-stage sessions need nothing but you.",
   },
   {
-    q: "Can I speak or sponsor?",
-    a: "The call for speakers opens soon. For sponsorship, write to the organising team.",
+    q: "Can I speak, sponsor or partner?",
+    a: "Yes. The call for speakers is open on CFPKit, tech communities can apply to be community partners from the Sponsors & partners section, and for sponsorship, write to the organising team.",
   },
 ];
